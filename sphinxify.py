@@ -45,6 +45,7 @@ CSS_PATH = osp.join(CONFDIR_PATH, 'static', 'css')
 JS_PATH = osp.join(CONFDIR_PATH, 'js')
 
 if LOCAL:
+    # TODO: Fix local use of MathJax
     MATHJAX_PATH = "file:///" + osp.join(JS_PATH, 'mathjax')
 else:
     MATHJAX_PATH = "https://cdn.mathjax.org/mathjax/latest/"
