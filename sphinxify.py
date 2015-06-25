@@ -78,8 +78,8 @@ def usage(title, message, tutorial_message, tutorial):
                         tutorial_message=tutorial_message, tutorial=tutorial)
 
 
-def generate_context(name='', argspec='', note='', math=True, collapse=False,
-                     img_path=''):
+def generate_context(name=None, argspec=None, note=None, math=True,
+                     collapse=False, img_path=''):
     """
     Generate the html_context dictionary for our Sphinx conf file.
     
@@ -106,7 +106,14 @@ def generate_context(name='', argspec='', note='', math=True, collapse=False,
     -------
     A dict of strings to be used by Jinja to generate the webpage
     """
-    
+
+    if name is None:
+        name = 'foo'
+    if argspec is None:
+        argspec = '(x, y)'
+    if note is None:
+        note = 'Function of Bar module'
+
     context = \
     {
       # Arg dependent variables
