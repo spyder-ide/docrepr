@@ -39,11 +39,15 @@ from utils import to_unicode_from_fs
 # Globals and constants
 #-----------------------------------------------------------------------------
 
+LOCAL = False
 CONFDIR_PATH = osp.dirname(__file__)
 CSS_PATH = osp.join(CONFDIR_PATH, 'static', 'css')
 JS_PATH = osp.join(CONFDIR_PATH, 'js')
 
-MATHJAX_PATH = osp.join(JS_PATH, 'mathjax')
+if LOCAL:
+    MATHJAX_PATH = "file:///" + osp.join(JS_PATH, 'mathjax')
+else:
+    MATHJAX_PATH = "https://cdn.mathjax.org/mathjax/latest/"
 JQUERY_PATH = JS_PATH
 
 #-----------------------------------------------------------------------------
