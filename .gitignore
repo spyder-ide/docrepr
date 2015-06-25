@@ -1,0 +1,13 @@
+# Compiled python files
+*.py[oc]
+
+# gedit files
+*~
+
+# Special dirs and files
+build/
+dist/
+bin/
+Thumbs.db
+.DS_Store/
+.DS_Store
