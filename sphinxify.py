@@ -13,7 +13,7 @@ Distributed under the terms of the BSD License
 
 Taken from the Sage project (www.sagemath.org).
 See here for the original version:
-www.sagemath.org/doc/reference/sagenb/misc/sphinxify.html
+http://doc.sagemath.org/html/en/reference/notebook/sagenb/misc/sphinxify.html
 """
 
 # Stdlib imports
