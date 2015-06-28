@@ -6,6 +6,8 @@
 //  copyable.
 //
 //  Taken from http://docs.python.org/_static/copybutton.js
+//
+// NOTE: This code only works with jQuery **1.8.3** or less
 //----------------------------------------------------------------------------
 
 //============================================================================
@@ -65,4 +67,3 @@ $(document).ready(function() {
             button.attr('title', hide_text);
         });
 });
-
