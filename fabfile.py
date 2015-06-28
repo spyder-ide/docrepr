@@ -11,6 +11,7 @@ import webbrowser
 import oinspect.utils as utils
 import oinspect.sphinxify as spxy
 
+
 def _show_page(content, fname):
     with open(fname, 'wb') as f:
         f.write(utils.to_binary_string(content, encoding='utf-8'))
