@@ -10,8 +10,8 @@
 from sphinx import __version__ as sphinx_version
 
 # Local imports
-from spyderlib.config import CONF
-from spyderlib.py3compat import u
+#from spyderlib.config import CONF
+#from spyderlib.py3compat import u
 
 #==============================================================================
 # General configuration
@@ -26,7 +26,7 @@ from spyderlib.py3compat import u
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 
 # We need jsmath to get pretty plain-text latex in docstrings
-math = CONF.get('inspector', 'math', '')
+math = True
 
 if sphinx_version < "1.1" or not math:
     extensions = ['sphinx.ext.jsmath']
@@ -53,8 +53,8 @@ source_suffix = '.rst'
 master_doc = 'docstring'
 
 # General information about the project.
-project = u("Object Inspector")
-copyright = u('2009--2013, The Spyder Development Team')
+project = u"OInspect library"
+copyright = u''
 
 # List of directories, relative to source directory, that shouldn't be searched
 # for source files.
@@ -113,4 +113,3 @@ html_split_index = False
 
 # If true, the reST sources are included in the HTML build as _sources/<name>.
 html_copy_source = False
-
