@@ -9,3 +9,9 @@ Oinspect library
 
 Derived from spyderlib.utils.inspector
 """
+
+# Configuration options for oinspect
+options = {
+    'render_math': True,
+    'local_mathjax': False,
+}

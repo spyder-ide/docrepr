@@ -32,29 +32,22 @@ import sphinx
 from sphinx.application import Sphinx
 
 # Local imports
+from . import options
 from utils import to_unicode_from_fs
 
 
 #-----------------------------------------------------------------------------
 # Globals and constants
 #-----------------------------------------------------------------------------
-
-LOCAL = False
 CONFDIR_PATH = osp.dirname(__file__)
 CSS_PATH = osp.join(CONFDIR_PATH, 'static', 'css')
 JS_PATH = osp.join(CONFDIR_PATH, 'js')
-
-if LOCAL:
-    # TODO: Fix local use of MathJax
-    MATHJAX_PATH = "file:///" + osp.join(JS_PATH, 'mathjax')
-else:
-    MATHJAX_PATH = "https://cdn.mathjax.org/mathjax/latest"
 JQUERY_PATH = JS_PATH
+
 
 #-----------------------------------------------------------------------------
 # Utility functions
 #-----------------------------------------------------------------------------
-
 def is_sphinx_markup(docstring):
     """Returns whether a string contains Sphinx-style ReST markup."""
     # this could be made much more clever
@@ -78,11 +71,11 @@ def usage(title, message, tutorial_message, tutorial):
                         tutorial_message=tutorial_message, tutorial=tutorial)
 
 
-def generate_context(name=None, argspec=None, note=None, math=True,
-                     collapse=False, img_path=''):
+def generate_context(name=None, argspec=None, note=None, collapse=False,
+                     img_path=''):
     """
     Generate the html_context dictionary for our Sphinx conf file.
-    
+
     This is a set of variables to be passed to the Jinja template engine and
     that are used to control how the webpage is rendered in connection with
     Sphinx
@@ -96,17 +89,15 @@ def generate_context(name=None, argspec=None, note=None, math=True,
         introspected
     argspec : str
         Argspec of the the function or method being introspected
-    math : bool
-        Turn on/off Latex rendering on the OI. If False, Latex will be shown in
-        plain text.
     collapse : bool
         Collapse sections
-    
+
     Returns
     -------
     A dict of strings to be used by Jinja to generate the webpage
     """
 
+    # Default values
     if name is None:
         name = 'foo'
     if argspec is None:
@@ -114,10 +105,16 @@ def generate_context(name=None, argspec=None, note=None, math=True,
     if note is None:
         note = 'Function of Bar module'
 
+    if options['local_mathjax']:
+        # TODO: Fix local use of MathJax
+        MATHJAX_PATH = "file:///" + osp.join(JS_PATH, 'mathjax')
+    else:
+        MATHJAX_PATH = "https://cdn.mathjax.org/mathjax/latest"
+
     context = \
     {
       # Arg dependent variables
-      'math_on': 'true' if math else '',
+      'math_on': 'true' if options['render_math'] else '',
       'name': name,
       'argspec': argspec,
       'note': note,
