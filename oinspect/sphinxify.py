@@ -71,8 +71,7 @@ def usage(title, message, tutorial_message, tutorial):
                         tutorial_message=tutorial_message, tutorial=tutorial)
 
 
-def generate_context(name=None, argspec=None, note=None, collapse=False,
-                     img_path=''):
+def generate_context(name=None, argspec=None, note=None, img_path=''):
     """
     Generate the html_context dictionary for our Sphinx conf file.
 
@@ -114,22 +113,22 @@ def generate_context(name=None, argspec=None, note=None, collapse=False,
     context = \
     {
       # Arg dependent variables
-      'math_on': 'true' if options['render_math'] else '',
       'name': name,
       'argspec': argspec,
       'note': note,
-      'collapse': collapse,
       'img_path': img_path,
-      
+
       # Static variables
       'css_path': CSS_PATH,
       'js_path': JS_PATH,
       'jquery_path': JQUERY_PATH,
       'mathjax_path': MATHJAX_PATH,
       'right_sphinx_version': '' if sphinx.__version__ < "1.1" else 'true',
-      'platform': sys.platform
+      'math_on': 'true' if options['render_math'] else '',
+      'platform': sys.platform,
+      'collapse': options['collapse_sections']
     }
-    
+
     return context
 
 

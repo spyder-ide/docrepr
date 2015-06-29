@@ -18,11 +18,13 @@ def _show_page(content, fname):
         f.write(utils.to_binary_string(content, encoding='utf-8'))
     webbrowser.open_new_tab(fname)
 
+
 def test_basic():
     """Test with an empty context"""
     docstring = 'A test'
     content = spxy.sphinxify(docstring, spxy.generate_context())
     _show_page(content, '/tmp/test_basic.html')
+
 
 def test_math():
     """Test a docstring with Latex on it"""
@@ -30,12 +32,14 @@ def test_math():
     content = spxy.sphinxify(docstring, spxy.generate_context())
     _show_page(content, '/tmp/test_math.html')
 
+
 def test_no_render_math():
     """Test a docstring with Latex on it but without rendering it"""
     docstring = 'This is a rational number :math:`\\frac{x}{y}`'
     oi.options['render_math'] = False
     content = spxy.sphinxify(docstring, spxy.generate_context())
-    _show_page(content, '/tmp/test_math.html')
+    _show_page(content, '/tmp/test_no_render_math.html')
+
 
 def test_numpy_sin():
     """Test for numpy.sin docstring"""
@@ -43,6 +47,16 @@ def test_numpy_sin():
     docstring = np.sin.__doc__
     content = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
     _show_page(content, '/tmp/test_np_sin.html')
+
+
+def test_collapse_sections():
+    """Test for numpy.sin docstring"""
+    import numpy as np
+    docstring = np.sin.__doc__
+    oi.options['collapse_sections'] = True
+    content = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
+    _show_page(content, '/tmp/test_collapse.html')
+
 
 def run_all():
     """Run all tests"""
