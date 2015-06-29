@@ -4,10 +4,11 @@
 Simple fabric file to test oinspect output
 """
 
-from __future__ import print_function
-
+# Stdlib imports
 import webbrowser
 
+# Local imports
+import oinspect as oi
 import oinspect.utils as utils
 import oinspect.sphinxify as spxy
 
@@ -26,6 +27,13 @@ def test_basic():
 def test_math():
     """Test a docstring with Latex on it"""
     docstring = 'This is a rational number :math:`\\frac{x}{y}`'
+    content = spxy.sphinxify(docstring, spxy.generate_context())
+    _show_page(content, '/tmp/test_math.html')
+
+def test_no_render_math():
+    """Test a docstring with Latex on it but without rendering it"""
+    docstring = 'This is a rational number :math:`\\frac{x}{y}`'
+    oi.options['render_math'] = False
     content = spxy.sphinxify(docstring, spxy.generate_context())
     _show_page(content, '/tmp/test_math.html')
 
