@@ -126,7 +126,8 @@ def generate_context(name=None, argspec=None, note=None, img_path=''):
       'right_sphinx_version': '' if sphinx.__version__ < "1.1" else 'true',
       'math_on': 'true' if options['render_math'] else '',
       'platform': sys.platform,
-      'collapse': options['collapse_sections']
+      'collapse': options['collapse_sections'],
+      'use_qt4': options['use_qt4']
     }
 
     return context

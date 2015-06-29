@@ -14,5 +14,6 @@ Derived from spyderlib.utils.inspector
 options = {
     'render_math': True,
     'local_mathjax': False,
-    'collapse_sections': False
+    'collapse_sections': False,
+    'use_qt4': False
 }

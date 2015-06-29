@@ -28,7 +28,7 @@ def test_basic():
 
 def test_math():
     """Test a docstring with Latex on it"""
-    docstring = 'This is a rational number :math:`\\frac{x}{y}`'
+    docstring = 'This is some math :math:`a^2 = b^2 + c^2`'
     content = spxy.sphinxify(docstring, spxy.generate_context())
     _show_page(content, '/tmp/test_math.html')
 
