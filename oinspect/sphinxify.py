@@ -133,6 +133,22 @@ def generate_context(name=None, argspec=None, note=None, collapse=False,
     return context
 
 
+def generate_extensions(render_math):
+    """Generate list of Sphinx extensions"""
+    # We need jsmath to get pretty plain-text latex in docstrings
+    extensions = []
+    if sphinx.__version__ < "1.1" or not render_math:
+        extensions = ['sphinx.ext.jsmath']
+    else:
+        extensions = ['sphinx.ext.mathjax']
+    
+    #For scipy and matplotlib docstrings, which need this extension to
+    # be rendered correctly (see Issue 1138)
+    extensions.append('sphinx.ext.autosummary')
+
+    return extensions
+
+
 def sphinxify(docstring, context, buildername='html'):
     """
     Runs Sphinx on a docstring and outputs the processed documentation.
@@ -195,13 +211,18 @@ def sphinxify(docstring, context, buildername='html'):
     else:
         confdir = CONFDIR_PATH
 
-    confoverrides = {'html_context': context}
+    # Get extensions list
+    extensions = generate_extensions(options['render_math'])
+
+    # Override conf variables
+    confoverrides = {'html_context': context, 'extensions': extensions}
 
     doctreedir = osp.join(srcdir, 'doctrees')
 
     sphinx_app = Sphinx(srcdir, confdir, srcdir, doctreedir, buildername,
                         confoverrides, status=None, warning=None,
                         freshenv=True, warningiserror=False, tags=None)
+
     try:
         sphinx_app.build(None, [rst_name])
     except SystemMessage:

@@ -6,13 +6,6 @@
 
 """Sphinx conf file for the object inspector rich text mode"""
 
-# 3rd party imports
-from sphinx import __version__ as sphinx_version
-
-# Local imports
-#from spyderlib.config import CONF
-#from spyderlib.py3compat import u
-
 #==============================================================================
 # General configuration
 #==============================================================================
@@ -24,18 +17,6 @@ from sphinx import __version__ as sphinx_version
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-
-# We need jsmath to get pretty plain-text latex in docstrings
-math = True
-
-if sphinx_version < "1.1" or not math:
-    extensions = ['sphinx.ext.jsmath']
-else:
-    extensions = ['sphinx.ext.mathjax']
-
-# For scipy and matplotlib docstrings, which need this extension to
-# be rendered correctly (see Issue 1138)
-extensions.append('sphinx.ext.autosummary')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['templates']
