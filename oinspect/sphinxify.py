@@ -127,7 +127,8 @@ def generate_context(name=None, argspec=None, note=None, img_path=''):
       'math_on': 'true' if options['render_math'] else '',
       'platform': sys.platform,
       'collapse': options['collapse_sections'],
-      'use_qt4': options['use_qt4']
+      'use_qt4': options['use_qt4'],
+      'outline': options['outline']
     }
 
     return context

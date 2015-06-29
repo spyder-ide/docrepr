@@ -49,11 +49,20 @@ def test_numpy_sin():
     _show_page(content, '/tmp/test_np_sin.html')
 
 
-def test_collapse_sections():
-    """Test for numpy.sin docstring"""
+def test_collapse():
+    """Test the collapse option"""
     import numpy as np
     docstring = np.sin.__doc__
     oi.options['collapse_sections'] = True
+    content = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
+    _show_page(content, '/tmp/test_collapse.html')
+
+
+def test_outline():
+    """Test the outline option"""
+    import numpy as np
+    docstring = np.sin.__doc__
+    oi.options['outline'] = True
     content = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
     _show_page(content, '/tmp/test_collapse.html')
 

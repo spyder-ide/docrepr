@@ -46,6 +46,9 @@
 
 {% if collapse %}
 <script src="file:///{{js_path}}/collapse_sections.js" type="text/javascript" charset="utf-8"></script>
+{% endif %}
+
+{% if outline %}
 <script src="file:///{{js_path}}/move_outline.js" type="text/javascript" charset="utf-8"></script>
 {% endif %}
 
@@ -78,7 +81,7 @@
     {# Docstring text #}
     <div class="docstring">
         {% block body %}{% endblock %}
-        {% if collapse %}
+        {% if outline %}
         <div class="section" id="outline">
             <h2> Outline </h2>
             {{ toc }}

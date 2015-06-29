@@ -15,5 +15,6 @@ options = {
     'render_math': True,
     'local_mathjax': False,
     'collapse_sections': False,
-    'use_qt4': False
+    'use_qt4': False,
+    'outline': False
 }
