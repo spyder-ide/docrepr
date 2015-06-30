@@ -164,7 +164,7 @@ def generate_extensions(render_math):
         extensions = ['sphinx.ext.mathjax']
 
     # For scipy and matplotlib docstrings, which need this extension to
-    # be rendered correctly (see Issue 1138)
+    # be rendered correctly (see Spyder Issue #1138)
     extensions.append('sphinx.ext.autosummary')
 
     # Plots
