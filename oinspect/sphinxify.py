@@ -39,6 +39,7 @@ from .utils import to_unicode_from_fs, to_binary_string
 #-----------------------------------------------------------------------------
 # Globals and constants
 #-----------------------------------------------------------------------------
+
 CONFDIR_PATH = osp.dirname(__file__)
 CSS_PATH = osp.join(CONFDIR_PATH, 'static', 'css')
 JS_PATH = osp.join(CONFDIR_PATH, 'js')
@@ -50,9 +51,11 @@ else:
     username = to_unicode_from_fs(os.environ.get('USER'))
     CACHEDIR = tempfile.gettempdir() + osp.sep + 'oinspect-' + username
 
+
 #-----------------------------------------------------------------------------
 # Utility functions
 #-----------------------------------------------------------------------------
+
 def is_sphinx_markup(docstring):
     """Returns whether a string contains Sphinx-style ReST markup."""
     # this could be made much more clever
@@ -114,7 +117,6 @@ def generate_context(name=None, argspec=None, note=None, img_path=''):
     -------
     A dict of strings to be used by Jinja to generate the webpage
     """
-
     # Default values
     if name is None:
         name = 'foo'
@@ -176,6 +178,10 @@ def generate_extensions(render_math):
     return extensions
 
 
+#-----------------------------------------------------------------------------
+# Sphinxify
+#-----------------------------------------------------------------------------
+
 def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     """
     Runs Sphinx on a docstring and outputs the processed documentation.
@@ -197,7 +203,6 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     An Sphinx-processed string, in either HTML or plain text format, depending
     on the value of `buildername`
     """
-
     # Create srcdir
     if not osp.isdir(CACHEDIR):
         os.mkdir(CACHEDIR)
