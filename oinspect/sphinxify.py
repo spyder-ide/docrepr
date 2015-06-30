@@ -67,6 +67,29 @@ def warning(message):
     return warning.render(css_path=CSS_PATH, text=message)
 
 
+def generate_conf(directory):
+    """
+    Generates a Sphinx configuration file in `directory`.
+
+    Parameters
+    ----------
+    directory : str
+        Base directory to use
+    """
+    # conf.py file for Sphinx
+    conf = osp.join(CONFDIR_PATH, 'conf.py')
+
+    # Docstring layout page (in Jinja):
+    layout = osp.join(osp.join(CONFDIR_PATH, 'templates'), 'layout.html')
+
+    os.makedirs(osp.join(directory, 'templates'))
+    os.makedirs(osp.join(directory, 'static'))
+    shutil.copy(conf, directory)
+    shutil.copy(layout, osp.join(directory, 'templates'))
+    open(osp.join(directory, '__init__.py'), 'w').write('')
+    open(osp.join(directory, 'static', 'empty'), 'w').write('')
+
+
 def generate_context(name=None, argspec=None, note=None, img_path=''):
     """
     Generate the html_context dictionary for our Sphinx conf file.
@@ -216,7 +239,7 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
         # TODO: This may be inefficient. Find a faster way to do it.
         confdir = tempfile.mkdtemp()
         confdir = to_unicode_from_fs(confdir)
-        generate_configuration(confdir)
+        generate_conf(confdir)
     else:
         confdir = CONFDIR_PATH
 
@@ -260,27 +283,3 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
 
     # Return output file name
     return output_name
-
-
-def generate_configuration(directory):
-    """
-    Generates a Sphinx configuration in `directory`.
-
-    Parameters
-    ----------
-    directory : str
-        Base directory to use
-    """
-    
-    # conf.py file for Sphinx
-    conf = osp.join(CONFDIR_PATH, 'conf.py')
-
-    # Docstring layout page (in Jinja):
-    layout = osp.join(osp.join(CONFDIR_PATH, 'templates'), 'layout.html')
-    
-    os.makedirs(osp.join(directory, 'templates'))
-    os.makedirs(osp.join(directory, 'static'))
-    shutil.copy(conf, directory)
-    shutil.copy(layout, osp.join(directory, 'templates'))
-    open(osp.join(directory, '__init__.py'), 'w').write('')
-    open(osp.join(directory, 'static', 'empty'), 'w').write('')
