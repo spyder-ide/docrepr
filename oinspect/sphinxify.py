@@ -153,7 +153,7 @@ def generate_extensions(render_math):
     return extensions
 
 
-def sphinxify(docstring, context, buildername='html'):
+def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     """
     Runs Sphinx on a docstring and outputs the processed documentation.
 
@@ -208,8 +208,8 @@ def sphinxify(docstring, context, buildername='html'):
     doc_file = codecs.open(rst_name, 'w', encoding='utf-8')
     doc_file.write(docstring)
     doc_file.close()
-    
-    temp_confdir = False
+
+    # Create confdir
     if temp_confdir:
         # TODO: This may be inefficient. Find a faster way to do it.
         confdir = tempfile.mkdtemp()
