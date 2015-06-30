@@ -181,9 +181,11 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     srcdir = tempfile.mkdtemp(dir=CACHEDIR)
     srcdir = to_unicode_from_fs(srcdir)
 
+    # Rst file to sphinxify
     base_name = osp.join(srcdir, 'docstring')
     rst_name = base_name + '.rst'
 
+    # Output file name
     if buildername == 'html':
         suffix = '.html'
     else:
@@ -195,6 +197,10 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     if context['math_on']:
         docstring = docstring.replace('\\\\', '\\\\\\\\')
 
+    # Write docstring to rst_name
+    with codecs.open(rst_name, 'w', encoding='utf-8') as rst_file:
+        rst_file.write(docstring)
+
     # Add a class to several characters on the argspec. This way we can
     # highlight them using css, in a similar way to what IPython does.
     # NOTE: Before doing this, we escape common html chars so that they
@@ -204,9 +210,6 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
         argspec = argspec.replace(char,
                          '<span class="argspec-highlight">' + char + '</span>')
     context['argspec'] = argspec
-
-    with codecs.open(rst_name, 'w', encoding='utf-8') as doc_file:
-        doc_file.write(docstring)
 
     # Create confdir
     if temp_confdir:
@@ -223,12 +226,13 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     # Override conf variables
     confoverrides = {'html_context': context, 'extensions': extensions}
 
+    # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
-
     sphinx_app = Sphinx(srcdir, confdir, srcdir, doctreedir, buildername,
                         confoverrides, status=None, warning=None,
                         freshenv=True, warningiserror=False, tags=None)
 
+    # Run the app
     try:
         sphinx_app.build(None, [rst_name])
     except SystemMessage:
@@ -238,6 +242,7 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
             f.write(to_binary_string(output, encoding='utf-8'))
         return output_name
 
+    # Some adjustments to the output
     if osp.exists(output_name):
         output = codecs.open(output_name, 'r', encoding='utf-8').read()
         output = output.replace('<pre>', '<pre class="literal-block">')
@@ -245,11 +250,15 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
         error_message = "It was not possible to get rich help for this object"
         output = warning(error_message)
 
+    # Remove temp confdir
     if temp_confdir:
         shutil.rmtree(confdir, ignore_errors=True)
 
+    # Rewrite output contents after adjustments
     with open(output_name, 'wb') as f:
         f.write(to_binary_string(output, encoding='utf-8'))
+
+    # Return output file name
     return output_name
 
 
