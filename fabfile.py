@@ -9,44 +9,41 @@ import webbrowser
 
 # Local imports
 import oinspect as oi
-import oinspect.utils as utils
 import oinspect.sphinxify as spxy
 
 
-def _show_page(content, fname):
-    with open(fname, 'wb') as f:
-        f.write(utils.to_binary_string(content, encoding='utf-8'))
-    webbrowser.open_new_tab(fname)
+def _show_page(url):
+    webbrowser.open_new_tab(url)
 
 
 def test_basic():
     """Test with an empty context"""
     docstring = 'A test'
-    content = spxy.sphinxify(docstring, spxy.generate_context())
-    _show_page(content, '/tmp/test_basic.html')
+    url = spxy.sphinxify(docstring, spxy.generate_context())
+    _show_page(url)
 
 
 def test_math():
     """Test a docstring with Latex on it"""
     docstring = 'This is some math :math:`a^2 = b^2 + c^2`'
-    content = spxy.sphinxify(docstring, spxy.generate_context())
-    _show_page(content, '/tmp/test_math.html')
+    url = spxy.sphinxify(docstring, spxy.generate_context())
+    _show_page(url)
 
 
 def test_no_render_math():
     """Test a docstring with Latex on it but without rendering it"""
     docstring = 'This is a rational number :math:`\\frac{x}{y}`'
     oi.options['render_math'] = False
-    content = spxy.sphinxify(docstring, spxy.generate_context())
-    _show_page(content, '/tmp/test_no_render_math.html')
+    url = spxy.sphinxify(docstring, spxy.generate_context())
+    _show_page(url)
 
 
 def test_numpy_sin():
     """Test for numpy.sin docstring"""
     import numpy as np
     docstring = np.sin.__doc__
-    content = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
-    _show_page(content, '/tmp/test_np_sin.html')
+    url = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
+    _show_page(url)
 
 
 def test_collapse():
@@ -54,8 +51,8 @@ def test_collapse():
     import numpy as np
     docstring = np.sin.__doc__
     oi.options['collapse_sections'] = True
-    content = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
-    _show_page(content, '/tmp/test_collapse.html')
+    url = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
+    _show_page(url)
 
 
 def test_outline():
@@ -63,12 +60,15 @@ def test_outline():
     import numpy as np
     docstring = np.sin.__doc__
     oi.options['outline'] = True
-    content = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
-    _show_page(content, '/tmp/test_collapse.html')
+    url = spxy.sphinxify(docstring, spxy.generate_context(name='sin'))
+    _show_page(url)
 
 
-def run_all():
+def test_all():
     """Run all tests"""
     test_basic()
     test_math()
+    test_no_render_math()
     test_numpy_sin()
+    test_collapse()
+    test_outline()

@@ -22,7 +22,7 @@ import os
 import os.path as osp
 import shutil
 import sys
-from tempfile import mkdtemp
+import tempfile
 from xml.sax.saxutils import escape
 
 # 3rd party imports
@@ -33,7 +33,7 @@ from sphinx.application import Sphinx
 
 # Local imports
 from . import options
-from utils import to_unicode_from_fs
+from .utils import to_unicode_from_fs, to_binary_string
 
 
 #-----------------------------------------------------------------------------
@@ -44,6 +44,11 @@ CSS_PATH = osp.join(CONFDIR_PATH, 'static', 'css')
 JS_PATH = osp.join(CONFDIR_PATH, 'js')
 JQUERY_PATH = JS_PATH
 
+if os.name == 'nt':
+    CACHEDIR = tempfile.gettempdir() + osp.sep + 'spyder'
+else:
+    username = to_unicode_from_fs(os.environ.get('USER'))
+    CACHEDIR = tempfile.gettempdir() + osp.sep + 'oinspect-' + username
 
 #-----------------------------------------------------------------------------
 # Utility functions
@@ -172,7 +177,10 @@ def sphinxify(docstring, context, buildername='html'):
     on the value of `buildername`
     """
 
-    srcdir = mkdtemp()
+    # Create srcdir
+    if not osp.isdir(CACHEDIR):
+        os.mkdir(CACHEDIR)
+    srcdir = tempfile.mkdtemp(dir=CACHEDIR)
     srcdir = to_unicode_from_fs(srcdir)
 
     base_name = osp.join(srcdir, 'docstring')
@@ -188,7 +196,7 @@ def sphinxify(docstring, context, buildername='html'):
     # docstrings
     if context['right_sphinx_version'] and context['math_on']:
         docstring = docstring.replace('\\\\', '\\\\\\\\')
-    
+
     # Add a class to several characters on the argspec. This way we can
     # highlight them using css, in a similar way to what IPython does.
     # NOTE: Before doing this, we escape common html chars so that they
@@ -206,7 +214,7 @@ def sphinxify(docstring, context, buildername='html'):
     temp_confdir = False
     if temp_confdir:
         # TODO: This may be inefficient. Find a faster way to do it.
-        confdir = mkdtemp()
+        confdir = tempfile.mkdtemp()
         confdir = to_unicode_from_fs(confdir)
         generate_configuration(confdir)
     else:
@@ -227,24 +235,25 @@ def sphinxify(docstring, context, buildername='html'):
     try:
         sphinx_app.build(None, [rst_name])
     except SystemMessage:
-        output = "It was not possible to generate rich text help for this "\
-                 "object.</br>Please see it in plain text."
-        return warning(output)
+        error_message = "It was not possible to get rich help for this object"
+        output = warning(error_message)
+        with open(output_name, 'wb') as f:
+            f.write(to_binary_string(output, encoding='utf-8'))
+        return output_name
 
-    # TODO: Investigate if this is necessary/important for us
     if osp.exists(output_name):
         output = codecs.open(output_name, 'r', encoding='utf-8').read()
         output = output.replace('<pre>', '<pre class="literal-block">')
     else:
-        output = "It was not possible to generate rich text help for this "\
-                 "object.</br>Please see it in plain text."
-        return warning(output)
+        error_message = "It was not possible to get rich help for this object"
+        output = warning(error_message)
 
     if temp_confdir:
         shutil.rmtree(confdir, ignore_errors=True)
-    shutil.rmtree(srcdir, ignore_errors=True)
 
-    return output
+    with open(output_name, 'wb') as f:
+        f.write(to_binary_string(output, encoding='utf-8'))
+    return output_name
 
 
 def generate_configuration(directory):
