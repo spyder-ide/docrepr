@@ -205,9 +205,8 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
                          '<span class="argspec-highlight">' + char + '</span>')
     context['argspec'] = argspec
 
-    doc_file = codecs.open(rst_name, 'w', encoding='utf-8')
-    doc_file.write(docstring)
-    doc_file.close()
+    with codecs.open(rst_name, 'w', encoding='utf-8') as doc_file:
+        doc_file.write(docstring)
 
     # Create confdir
     if temp_confdir:
