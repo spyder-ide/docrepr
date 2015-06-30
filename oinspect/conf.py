@@ -6,6 +6,9 @@
 
 """Sphinx conf file for the object inspector rich text mode"""
 
+import os
+import sys
+
 #==============================================================================
 # General configuration
 #==============================================================================
@@ -13,10 +16,7 @@
 # If your extensions are in another directory, add it here. If the directory
 # is relative to the documentation root, use os.path.abspath to make it
 # absolute, like shown here.
-#sys.path.append(os.path.abspath('.'))
-
-# Add any Sphinx extension module names here, as strings. They can be extensions
-# coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
+sys.path.append(os.path.abspath('./sphinxext'))
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['templates']
@@ -104,7 +104,7 @@ import numpy as np
 np.random.seed(0)
 """
 plot_include_source = True
-plot_html_show_source_link = True
+plot_html_show_source_link = False
 plot_html_show_formats = False
 plot_formats = [('png', 100)]
 plot_working_directory = '/tmp'

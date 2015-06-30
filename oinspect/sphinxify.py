@@ -153,10 +153,10 @@ def generate_extensions(render_math):
     extensions.append('sphinx.ext.autosummary')
 
     # Plots
-    # TODO: Add an option to avoid importing mpl every time
     try:
+        # TODO: Add an option to avoid importing mpl every time
         import matplotlib   # analysis:ignore
-        extensions.append('matplotlib.sphinxext.plot_directive')
+        extensions.append('plot_directive')
     except ImportError:
         pass
 
