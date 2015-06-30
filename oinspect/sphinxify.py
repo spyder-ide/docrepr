@@ -119,7 +119,6 @@ def generate_context(name=None, argspec=None, note=None, img_path=''):
       'js_path': JS_PATH,
       'jquery_path': JQUERY_PATH,
       'mathjax_path': MATHJAX_PATH,
-      'right_sphinx_version': '' if sphinx.__version__ < "1.1" else 'true',
       'math_on': 'true' if options['render_math'] else '',
       'platform': sys.platform,
       'collapse': options['collapse_sections'],
@@ -193,7 +192,7 @@ def sphinxify(docstring, context, buildername='html'):
 
     # This is needed so users can type \\ on latex eqnarray envs inside raw
     # docstrings
-    if context['right_sphinx_version'] and context['math_on']:
+    if context['math_on']:
         docstring = docstring.replace('\\\\', '\\\\\\\\')
 
     # Add a class to several characters on the argspec. This way we can
