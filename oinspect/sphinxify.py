@@ -5,7 +5,7 @@ Process docstrings with Sphinx
 
 AUTHORS:
 - Tim Joseph Dumol (2009-09-29): initial version
-- The Spyder Development Team: Several changes to make it work with Spyder
+- The Spyder Development Team: Maintenance
 
 Copyright (C) 2009 Tim Dumol <tim@timdumol.com>
 Copyright (C) 2013- The Spyder Development Team
