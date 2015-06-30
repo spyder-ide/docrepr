@@ -64,6 +64,18 @@ def test_outline():
     _show_page(url)
 
 
+def test_plot():
+    """Test the outline option"""
+    docstring = """
+.. plot::
+
+   >>> import matplotlib.pyplot as plt
+   >>> plt.plot([1,2,3], [4,5,6])
+"""
+    url = spxy.sphinxify(docstring, spxy.generate_context())
+    _show_page(url)
+
+
 def test_all():
     """Run all tests"""
     test_basic()
@@ -72,3 +84,4 @@ def test_all():
     test_numpy_sin()
     test_collapse()
     test_outline()
+    test_plot()
