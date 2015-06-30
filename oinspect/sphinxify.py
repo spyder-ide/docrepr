@@ -46,7 +46,7 @@ JS_PATH = osp.join(CONFDIR_PATH, 'js')
 JQUERY_PATH = JS_PATH
 
 if os.name == 'nt':
-    CACHEDIR = tempfile.gettempdir() + osp.sep + 'spyder'
+    CACHEDIR = tempfile.gettempdir() + osp.sep + 'oinspect'
 else:
     username = to_unicode_from_fs(os.environ.get('USER'))
     CACHEDIR = tempfile.gettempdir() + osp.sep + 'oinspect-' + username
