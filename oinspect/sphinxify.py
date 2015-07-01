@@ -110,8 +110,6 @@ def generate_context(name=None, argspec=None, note=None, img_path=''):
         introspected
     argspec : str
         Argspec of the the function or method being introspected
-    collapse : bool
-        Collapse sections
 
     Returns
     -------
