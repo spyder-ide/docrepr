@@ -180,7 +180,7 @@ def generate_extensions(render_math):
 # Sphinxify
 #-----------------------------------------------------------------------------
 
-def sphinxify(docstring, context, srcdir, output_format='html',
+def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
               temp_confdir=False):
     """
     Runs Sphinx on a docstring and outputs the processed content
@@ -192,10 +192,20 @@ def sphinxify(docstring, context, srcdir, output_format='html',
 
     context : dict
         Variables to be passed to the layout template to control how its
-        rendered (through the Sphinx variable *html_context*).
+        rendered (through the Sphinx variable *html_context*)
+
+    srcdir : str
+        Source directory where Sphinx is going to be run
+
+    doc_type : str
+        Docstring type. It could be 'main' for the main docstring or
+        'class' for the class one
 
     output_format:  str
         It can be either `html` or `text`.
+
+    temp_confdir : bool
+        Whether to create a temp conf dir for Sphinx
 
     Returns
     -------
@@ -217,6 +227,10 @@ def sphinxify(docstring, context, srcdir, output_format='html',
     # docstrings
     if context['math_on']:
         docstring = docstring.replace('\\\\', '\\\\\\\\')
+
+    # Set docstring type
+    if doc_type is None:
+        context['doc_type'] = 'main'
 
     # Write docstring to rst_name
     with codecs.open(rst_name, 'w', encoding='utf-8') as rst_file:
