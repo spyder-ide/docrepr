@@ -268,11 +268,13 @@ def sphinxify(docstring, context, srcdir, buildername='html',
     return output
 
 
-def doc_repr(docstring, context):
+def rich_repr(docstring, context):
     """
-    Generate a docstring representation (for now only a rich one), by
-    processing plain-text rst through Sphinx and adding several
-    metadata of the object associated to the docstring
+    Generate a rich docstring representation (as a web page)
+
+    This is done by processing plain-text rst through Sphinx and
+    adding several metadata of the object associated to the
+    docstring
 
     Parameters
     ----------
@@ -285,7 +287,7 @@ def doc_repr(docstring, context):
 
     Returns
     -------
-    The url of the representation 
+    The url of the page that contains the rich representation 
     """
     # Create srcdir
     if not osp.isdir(CACHEDIR):
