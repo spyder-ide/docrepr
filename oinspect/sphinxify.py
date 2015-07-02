@@ -180,7 +180,7 @@ def generate_extensions(render_math):
 # Sphinxify
 #-----------------------------------------------------------------------------
 
-def sphinxify(docstring, context, srcdir, buildername='html',
+def sphinxify(docstring, context, srcdir, output_format='html',
               temp_confdir=False):
     """
     Runs Sphinx on a docstring and outputs the processed content
@@ -194,20 +194,20 @@ def sphinxify(docstring, context, srcdir, buildername='html',
         Variables to be passed to the layout template to control how its
         rendered (through the Sphinx variable *html_context*).
 
-    buildername:  str
+    output_format:  str
         It can be either `html` or `text`.
 
     Returns
     -------
     An Sphinx-processed string, in either HTML or plain text format, depending
-    on the value of `buildername`
+    on the value of `output_format`
     """
     # Rst file to sphinxify
     base_name = osp.join(srcdir, 'docstring')
     rst_name = base_name + '.rst'
 
     # Output file name
-    if buildername == 'html':
+    if output_format == 'html':
         suffix = '.html'
     else:
         suffix = '.txt'
@@ -239,7 +239,7 @@ def sphinxify(docstring, context, srcdir, buildername='html',
 
     # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
-    sphinx_app = Sphinx(srcdir, confdir, srcdir, doctreedir, buildername,
+    sphinx_app = Sphinx(srcdir, confdir, srcdir, doctreedir, output_format,
                         confoverrides, status=None, warning=None,
                         freshenv=True, warningiserror=False, tags=None)
 
