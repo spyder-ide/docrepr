@@ -180,9 +180,10 @@ def generate_extensions(render_math):
 # Sphinxify
 #-----------------------------------------------------------------------------
 
-def sphinxify(docstring, context, buildername='html', temp_confdir=False):
+def sphinxify(docstring, context, srcdir, buildername='html',
+              temp_confdir=False):
     """
-    Runs Sphinx on a docstring and outputs the processed documentation.
+    Runs Sphinx on a docstring and outputs the processed content
 
     Parameters
     ----------
@@ -201,12 +202,6 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     An Sphinx-processed string, in either HTML or plain text format, depending
     on the value of `buildername`
     """
-    # Create srcdir
-    if not osp.isdir(CACHEDIR):
-        os.mkdir(CACHEDIR)
-    srcdir = tempfile.mkdtemp(dir=CACHEDIR)
-    srcdir = to_unicode_from_fs(srcdir)
-
     # Rst file to sphinxify
     base_name = osp.join(srcdir, 'docstring')
     rst_name = base_name + '.rst'
@@ -226,16 +221,6 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     # Write docstring to rst_name
     with codecs.open(rst_name, 'w', encoding='utf-8') as rst_file:
         rst_file.write(docstring)
-
-    # Add a class to several characters on the argspec. This way we can
-    # highlight them using css, in a similar way to what IPython does.
-    # NOTE: Before doing this, we escape common html chars so that they
-    # don't interfere with the rest of html present in the page
-    argspec = escape(context['argspec'])
-    for char in ['=', ',', '(', ')', '*', '**']:
-        argspec = argspec.replace(char,
-                         '<span class="argspec-highlight">' + char + '</span>')
-    context['argspec'] = argspec
 
     # Create confdir
     if temp_confdir:
@@ -262,11 +247,10 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     try:
         sphinx_app.build(None, [rst_name])
     except SystemMessage:
+        # TODO: Make this message configurable, so that it can be translated
         error_message = "It was not possible to get rich help for this object"
         output = warning(error_message)
-        with open(output_name, 'wb') as f:
-            f.write(to_binary_string(output, encoding='utf-8'))
-        return output_name
+        return output
 
     # Some adjustments to the output
     if osp.exists(output_name):
@@ -280,9 +264,60 @@ def sphinxify(docstring, context, buildername='html', temp_confdir=False):
     if temp_confdir:
         shutil.rmtree(confdir, ignore_errors=True)
 
+    # Return contents
+    return output
+
+
+def doc_repr(docstring, context):
+    """
+    Generate a docstring representation (for now only a rich one), by
+    processing plain-text rst through Sphinx and adding several
+    metadata of the object associated to the docstring
+
+    Parameters
+    ----------
+    docstring : str
+        a ReST-formatted docstring
+
+    context : dict
+        Variables to be passed to the page template to control how its
+        rendered
+
+    Returns
+    -------
+    The url of the representation 
+    """
+    # Create srcdir
+    if not osp.isdir(CACHEDIR):
+        os.mkdir(CACHEDIR)
+    srcdir = tempfile.mkdtemp(dir=CACHEDIR)
+    srcdir = to_unicode_from_fs(srcdir)
+
+    output_file = osp.join(srcdir, 'rich_repr_output.html')
+
+    # Docstring contents
+    content = sphinxify(docstring, context, srcdir)
+    context['content'] = content
+
+    # Add a class to several characters on the argspec. This way we can
+    # highlight them using css, in a similar way to what IPython does.
+    # NOTE: Before doing this, we escape common html chars so that they
+    # don't interfere with the rest of html present in the page
+    argspec = escape(context['argspec'])
+    for char in ['=', ',', '(', ')', '*', '**']:
+        argspec = argspec.replace(char,
+                         '<span class="argspec-highlight">' + char + '</span>')
+    context['argspec'] = argspec
+
+    # Replace vars on the template
+    env = Environment()
+    env.loader = FileSystemLoader(osp.join(CONFDIR_PATH, 'templates'))
+    page = env.get_template("rich_repr.html")
+    output = page.render(**context)
+
     # Rewrite output contents after adjustments
-    with open(output_name, 'wb') as f:
+    with open(output_file, 'wb') as f:
         f.write(to_binary_string(output, encoding='utf-8'))
 
     # Return output file name
-    return output_name
+    return output_file
