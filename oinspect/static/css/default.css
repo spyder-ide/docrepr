@@ -73,7 +73,7 @@ span.argspec-highlight {
 
 /* --- Docstring div style --- */
 div.docstring {
-    margin-top: -1px;
+    padding: 20px;
 }
 
 div.docstring p {
