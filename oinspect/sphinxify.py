@@ -197,10 +197,6 @@ def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
     srcdir : str
         Source directory where Sphinx is going to be run
 
-    doc_type : str
-        Docstring type. It could be 'main' for the main docstring or
-        'class' for the class one
-
     output_format:  str
         It can be either `html` or `text`.
 
@@ -227,10 +223,6 @@ def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
     # docstrings
     if context['math_on']:
         docstring = docstring.replace('\\\\', '\\\\\\\\')
-
-    # Set docstring type
-    if doc_type is None:
-        context['doc_type'] = 'main'
 
     # Write docstring to rst_name
     with codecs.open(rst_name, 'w', encoding='utf-8') as rst_file:
