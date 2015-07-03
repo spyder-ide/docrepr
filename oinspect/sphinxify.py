@@ -303,9 +303,9 @@ def rich_repr(docstring, context):
 
     output_file = osp.join(srcdir, 'rich_repr_output.html')
 
-    # Docstring contents
-    content = sphinxify(docstring, context, srcdir)
-    context['content'] = content
+    # Sphinxified dsocstring contents
+    obj_doc = sphinxify(docstring, context, srcdir)
+    context['docstring'] = obj_doc
 
     # Add a class to several characters on the argspec. This way we can
     # highlight them using css, in a similar way to what IPython does.
