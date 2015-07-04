@@ -85,11 +85,17 @@
         <!-- Nav tabs -->
         <ul id="doc-tabs" class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab"><b>Main help</b></a></li>
+            {% if class_docstring %}
+            <li role="presentation"><a href="#class" aria-controls="class" role="tab" data-toggle="tab"><b>Class help</b></a></li>
+            {% endif %}
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="main">{{docstring}}</div>
+            {% if class_docstring %}
+            <div role="tabpanel" class="tab-pane" id="class">{{class_docstring}}</div>
+            {% endif %}
         </div>
     </div>
 </body>

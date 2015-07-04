@@ -307,6 +307,12 @@ def rich_repr(oinfo, context):
     obj_doc = sphinxify(oinfo['docstring'], context, srcdir)
     context['docstring'] = obj_doc
 
+    if oinfo.get('class_docstring'):
+        class_doc = sphinxify(oinfo['class_docstring'], context, srcdir)
+        context['class_docstring'] = class_doc
+    else:
+        context['class_docstring'] = ''
+
     # Add a class to several characters on the argspec. This way we can
     # highlight them using css, in a similar way to what IPython does.
     # NOTE: Before doing this, we escape common html chars so that they
