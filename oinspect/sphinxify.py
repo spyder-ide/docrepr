@@ -274,7 +274,7 @@ def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
     return output
 
 
-def rich_repr(docstring, context):
+def rich_repr(oinfo, context):
     """
     Generate a rich docstring representation (as a web page)
 
@@ -304,7 +304,7 @@ def rich_repr(docstring, context):
     output_file = osp.join(srcdir, 'rich_repr_output.html')
 
     # Sphinxified dsocstring contents
-    obj_doc = sphinxify(docstring, context, srcdir)
+    obj_doc = sphinxify(oinfo['docstring'], context, srcdir)
     context['docstring'] = obj_doc
 
     # Add a class to several characters on the argspec. This way we can
