@@ -119,7 +119,7 @@ def generate_context(name=None, argspec=None, note=None, img_path=''):
     if name is None:
         name = 'foo'
     if argspec is None:
-        argspec = '(x, y)'
+        argspec = '(...)'
     if note is None:
         note = 'Function of Bar module'
 
