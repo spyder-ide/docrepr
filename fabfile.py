@@ -113,6 +113,13 @@ def test_docs_py():
     _show_page(url)
 
 
+def test_no_doc():
+    oinfo = object_info()
+    oinfo['docstring'] = '<no docstring>'
+    url = spxy.rich_repr(oinfo)
+    _show_page(url)
+
+
 def test_all():
     """Run all tests"""
     test_basic()
