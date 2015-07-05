@@ -366,11 +366,12 @@ def rich_repr(oinfo):
         template_vars['class_docstring'] = ''
 
     # Add link to docs.python.org
-    # TODO: Make this more robust
+    # TODO: Make this really work (e.g. for the math module)
     template_vars['docs_py_org'] = ''
     file_def = oinfo.get('file')
     if file_def:
-        if not 'site-packages' in file_def and not 'dist-packages' in file_def:
+        lib_dirs = ['site-packages', 'dist-packages', 'pymodules']
+        if not any([d in file_def for d in lib_dirs]):
             mod = file_def.split(os.sep)[-1]
             mod_name = mod.split('.')[0]
             if PY2:
