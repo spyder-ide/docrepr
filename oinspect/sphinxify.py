@@ -21,6 +21,7 @@ import codecs
 import inspect
 import os
 import os.path as osp
+import re
 import shutil
 import sys
 import tempfile
@@ -79,6 +80,30 @@ def format_argspec(argspec):
     """
     return inspect.formatargspec(argspec['args'], argspec['varargs'],
                                  argspec['varkw'], argspec['defaults'])
+
+
+def getsignaturefromtext(text, objname):
+    """Get object signatures from text (object documentation)
+    Return a list containing a single string in most cases
+    Example of multiple signatures: PyQt4 objects"""
+    # Regexps
+    oneline_re = objname + r'\([^\)].+?(?<=[\w\]\}\'"])\)(?!,)'
+    multiline_re = objname + r'\([^\)]+(?<=[\w\]\}\'"])\)(?!,)'
+    multiline_end_parenleft_re = r'(%s\([^\)]+(\),\n.+)+(?<=[\w\]\}\'"])\))'
+    # Grabbing signatures
+    if not text:
+        text = ''
+    sigs_1 = re.findall(oneline_re + '|' + multiline_re, text)
+    sigs_2 = [g[0] for g in re.findall(multiline_end_parenleft_re % objname, text)]
+    all_sigs = sigs_1 + sigs_2
+    # The most relevant signature is usually the first one. There could be
+    # others in doctests but those are not so important
+    if all_sigs:
+        sig = all_sigs[0]
+        sig = '(' + sig.split('(')[-1] # Remove objname
+        return sig
+    else:
+        return ''
 
 
 def generate_conf(directory):
@@ -144,13 +169,21 @@ def init_template_vars(oinfo):
 
     # Argspec
     if oinfo['argspec'] is None:
-        tmpl_vars['argspec'] = '(...)'
+        argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
+        if argspec:
+            tmpl_vars['argspec'] = argspec
+        else:
+            tmpl_vars['argspec'] = ''
     else:
         argspec = oinfo['argspec']
         try:
             has_self = argspec['args'][0] == 'self'
         except (KeyError, IndexError):
-            tmpl_vars['argspec'] = '(...)'
+            argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
+            if argspec:
+                tmpl_vars['argspec'] = argspec
+            else:
+                tmpl_vars['argspec'] = '(...)'
         else:
             if has_self:
                 argspec['args'] = argspec['args'][1:]
