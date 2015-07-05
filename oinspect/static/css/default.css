@@ -292,6 +292,10 @@ dt {
     /*font-size: 16px;*/
 }
 
+dd {
+    margin-left: 30px;
+}
+
 .classifier {
     /*font-size: 10pt;*/
     font-weight: normal;
@@ -321,95 +325,9 @@ div.admonition p.admonition-title {
 }
 
 
-/* ----------- Panels ----------- */
+/* ----------- For Firefox ----------- */
 
-.panel {
-    margin-top: 15px;
-    background-color: #ffffff;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-
-.panel-heading {
-    padding: 10px 15px;
-    border-bottom: 1px solid transparent;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
-}
-
-.panel-title {
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 110%;
-    color: rgb(255,255,255);
-}
-
-.panel-body {
-    padding: 15px;
-}
-
-.panel-usage {
-    border-color: #2fa4e7;
-    margin-top: 15px;
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.panel-usage > .panel-heading {
-    color: #ffffff;
-    background-color: #2fa4e7;
-    border-color: #2fa4e7;
-}
-
-.panel-usage > .panel-body > br {
-    display: block;
-    margin: 12px 0;
-    content: "";
-}
-
-.hr {
-    background-color: rgb(200, 200, 200);
-    height: 1px;
-}
-
-
-/* ----------- IPython console styles ----------- */
-
-/* --- Loading --- */
-.loading {
-    position: absolute;
-    margin: -20px 0 0 -95px;
-    width: 180px;
-    height: auto;
-    left: 50%;
-    top: 50%;
-    background-color: #EEEEEE;
-    border: 1px solid #C9C9C9;
-    border-radius: 6px;
-    box-shadow: 0px 0px 7px #CACACA;
-    color: #333333;
-    padding: 12px;
-    text-align: center;
-}
-
-#loading-image {
-    float: left;
-}
-
-#loading-message {
-    margin-left: 23px;
-}
-
-/* --- Kernel error messages --- */
-.panel-danger {
-    border-color: #eed3d7;
-}
-
-.panel-danger > .panel-heading {
-    color: #b94a48;
-    background-color: #f2dede;
-    border-color: #eed3d7;
-    background-color: rgb(199, 28, 34);
+/* Remove dotted border when clicking on tabs */
+a:focus, a:active {
+    outline: none !important;
 }
