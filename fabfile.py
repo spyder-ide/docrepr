@@ -91,6 +91,15 @@ def test_plot():
     _show_page(url)
 
 
+def test_docs_py():
+    """Test the outline option"""
+    import subprocess as sp
+    oinfo = inspector.info(sp.Popen)
+    oinfo['name'] = 'Popen'
+    url = spxy.rich_repr(oinfo)
+    _show_page(url)
+
+
 def test_all():
     """Run all tests"""
     test_basic()
