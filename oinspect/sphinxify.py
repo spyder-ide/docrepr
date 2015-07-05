@@ -179,15 +179,15 @@ def init_template_vars(oinfo):
         try:
             has_self = argspec['args'][0] == 'self'
         except (KeyError, IndexError):
-            argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
-            if argspec:
-                tmpl_vars['argspec'] = argspec
+            fmt_argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
+            if fmt_argspec:
+                tmpl_vars['argspec'] = fmt_argspec
             else:
                 tmpl_vars['argspec'] = '(...)'
         else:
             if has_self:
                 argspec['args'] = argspec['args'][1:]
-        tmpl_vars['argspec'] = format_argspec(argspec)
+                tmpl_vars['argspec'] = format_argspec(argspec)
 
     # Type
     if oinfo['type_name'] is None:
