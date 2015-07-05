@@ -194,8 +194,7 @@ def generate_extensions(render_math):
 # Sphinxify
 #-----------------------------------------------------------------------------
 
-def sphinxify(docstring, srcdir, doc_type=None, output_format='html',
-              temp_confdir=False):
+def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     """
     Runs Sphinx on a docstring and outputs the processed content
 
