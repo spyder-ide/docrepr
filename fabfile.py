@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*
 
 """
-Simple fabric file to test oinspect output
+Simple fabric file to test docrepr output
 """
 
 # Stdlib imports
@@ -11,8 +11,8 @@ import webbrowser
 from IPython.core.oinspect import Inspector, object_info
 
 # Local imports
-import oinspect as oi
-import oinspect.sphinxify as spxy
+import docrepr as dr
+import docrepr.sphinxify as spxy
 
 
 # Main inspector instance
@@ -55,7 +55,7 @@ def test_no_render_math():
     oinfo = object_info()
     oinfo['name'] = 'Foo'
     oinfo['docstring'] = 'This is a rational number :math:`\\frac{x}{y}`'
-    oi.options['render_math'] = False
+    dr.options['render_math'] = False
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
@@ -74,7 +74,7 @@ def test_collapse():
     import numpy as np
     oinfo = inspector.info(np.sin)
     oinfo['name'] = 'sin'
-    oi.options['collapse_sections'] = True
+    dr.options['collapse_sections'] = True
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
@@ -84,7 +84,7 @@ def test_outline():
     import numpy as np
     oinfo = inspector.info(np.sin)
     oinfo['name'] = 'sin'
-    oi.options['outline'] = True
+    dr.options['outline'] = True
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
