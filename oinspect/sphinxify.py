@@ -267,6 +267,10 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     if template_vars['math_on']:
         docstring = docstring.replace('\\\\', '\\\\\\\\')
 
+    if docstring == '<no docstring>':
+        template_vars['warning'] = 'true'
+        template_vars['warn_message'] = "No documentation available"
+
     # Write docstring to rst_name
     with codecs.open(rst_name, 'w', encoding='utf-8') as rst_file:
         rst_file.write(docstring)

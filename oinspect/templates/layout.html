@@ -10,6 +10,11 @@
 #}
 
 {# Docstring text #}
+{% if warning %}
+<div id="doc-warning">
+    {{warn_message}}
+</div>
+{% else %}
 <div class="docstring">
     {% block body %}{% endblock %}
     {% if outline %}
@@ -19,3 +24,4 @@
     </div>
     {% endif %}
 </div>
+{% endif %}
