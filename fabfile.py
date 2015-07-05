@@ -23,10 +23,20 @@ def _show_page(url):
     webbrowser.open_new_tab(url)
 
 
+def test_empty_oinfo():
+    """Test with totally empty oinfo"""
+    oinfo = object_info()
+    url = spxy.rich_repr(oinfo)
+    _show_page(url)
+
+
 def test_basic():
     """Test with an empty context"""
     oinfo = object_info()
+    oinfo['name'] = 'Foo'
+    oinfo['argspec'] = {}
     oinfo['docstring'] = 'A test'
+    oinfo['type_name'] = 'Function'
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
@@ -34,6 +44,7 @@ def test_basic():
 def test_math():
     """Test a docstring with Latex on it"""
     oinfo = object_info()
+    oinfo['name'] = 'Foo'
     oinfo['docstring'] = 'This is some math :math:`a^2 = b^2 + c^2`'
     url = spxy.rich_repr(oinfo)
     _show_page(url)
@@ -42,6 +53,7 @@ def test_math():
 def test_no_render_math():
     """Test a docstring with Latex on it but without rendering it"""
     oinfo = object_info()
+    oinfo['name'] = 'Foo'
     oinfo['docstring'] = 'This is a rational number :math:`\\frac{x}{y}`'
     oi.options['render_math'] = False
     url = spxy.rich_repr(oinfo)
@@ -86,22 +98,17 @@ def test_plot():
    >>> plt.plot([1,2,3], [4,5,6])
 """
     oinfo = object_info()
+    oinfo['name'] = 'Foo'
     oinfo['docstring'] = docstring
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
 
 def test_docs_py():
-    """Test the outline option"""
+    """Test linking to docs.python.org"""
     import subprocess as sp
     oinfo = inspector.info(sp.Popen)
     oinfo['name'] = 'Popen'
-    url = spxy.rich_repr(oinfo)
-    _show_page(url)
-
-
-def test_empty_oinfo():
-    oinfo = object_info()
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
