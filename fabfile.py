@@ -100,6 +100,12 @@ def test_docs_py():
     _show_page(url)
 
 
+def test_empty_oinfo():
+    oinfo = object_info()
+    url = spxy.rich_repr(oinfo)
+    _show_page(url)
+
+
 def test_all():
     """Run all tests"""
     test_basic()

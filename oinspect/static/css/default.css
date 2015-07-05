@@ -80,6 +80,9 @@ div.docstring p {
     padding: 0px 2px 0px;
 }
 
+div.tabs {
+    margin-top: 10px;
+}
 
 /* --- Headers style --- */
 h2, h3, h4 {

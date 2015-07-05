@@ -84,15 +84,20 @@ def format_argspec(argspec):
 
 def getsignaturefromtext(text, objname):
     """Get object signatures from text (object documentation)
+
     Return a list containing a single string in most cases
-    Example of multiple signatures: PyQt4 objects"""
+    Example of multiple signatures: PyQt4 objects
+    """
+    # Default values
+    if not text:
+        text = ''
+    if not objname:
+        objname = ''
     # Regexps
     oneline_re = objname + r'\([^\)].+?(?<=[\w\]\}\'"])\)(?!,)'
     multiline_re = objname + r'\([^\)]+(?<=[\w\]\}\'"])\)(?!,)'
     multiline_end_parenleft_re = r'(%s\([^\)]+(\),\n.+)+(?<=[\w\]\}\'"])\))'
     # Grabbing signatures
-    if not text:
-        text = ''
     sigs_1 = re.findall(oneline_re + '|' + multiline_re, text)
     sigs_2 = [g[0] for g in re.findall(multiline_end_parenleft_re % objname, text)]
     all_sigs = sigs_1 + sigs_2
@@ -160,20 +165,19 @@ def init_template_vars(oinfo):
     It gives default values to the most important variables
     """
     tmpl_vars = global_template_vars()
-    
+
     # Object name
     if oinfo['name'] is None:
-        tmpl_vars['name'] = 'foo'
+        tmpl_vars['name'] = ''
     else:
         tmpl_vars['name'] = oinfo['name']
 
     # Argspec
+    tmpl_vars['argspec'] = ''
     if oinfo['argspec'] is None:
         argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
         if argspec:
             tmpl_vars['argspec'] = argspec
-        else:
-            tmpl_vars['argspec'] = ''
     else:
         argspec = oinfo['argspec']
         try:
@@ -191,7 +195,7 @@ def init_template_vars(oinfo):
 
     # Type
     if oinfo['type_name'] is None:
-        tmpl_vars['note'] = 'Function of Bar module'
+        tmpl_vars['note'] = ''
     else:
         tmpl_vars['note'] = '%s' % oinfo['type_name']
 
@@ -250,6 +254,9 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     An Sphinx-processed string, in either HTML or plain text format, depending
     on the value of `output_format`
     """
+    if docstring is None:
+        docstring = ''
+    
     # Rst file to sphinxify
     base_name = osp.join(srcdir, 'docstring')
     rst_name = base_name + '.rst'
@@ -267,7 +274,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     if template_vars['math_on']:
         docstring = docstring.replace('\\\\', '\\\\\\\\')
 
-    if docstring == '<no docstring>':
+    if not docstring or docstring == '<no docstring>':
         template_vars['warning'] = 'true'
         template_vars['warn_message'] = "No documentation available"
 
