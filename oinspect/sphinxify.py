@@ -35,7 +35,7 @@ from sphinx.application import Sphinx
 
 # Local imports
 from . import options
-from .utils import to_unicode_from_fs, to_binary_string
+from .utils import PY2, to_unicode_from_fs, to_binary_string
 
 
 #-----------------------------------------------------------------------------
@@ -353,6 +353,22 @@ def rich_repr(oinfo):
         template_vars['class_docstring'] = class_doc
     else:
         template_vars['class_docstring'] = ''
+
+    # Add link to docs.python.org
+    # TODO: Make this more robust
+    template_vars['docs_py_org'] = ''
+    file_def = oinfo.get('file')
+    if file_def:
+        if not 'site-packages' in file_def and not 'dist-packages' in file_def:
+            mod = file_def.split(os.sep)[-1]
+            mod_name = mod.split('.')[0]
+            if PY2:
+                link = "https://docs.python.org/2/library/{0}.html#{0}.{1}".format(
+                        mod_name, oinfo['name'])
+            else:
+                link = "https://docs.python.org/3/library/{0}.html#{0}.{1}".format(
+                        mod_name, oinfo['name'])
+            template_vars['docs_py_org'] = link
 
     # Add a class to several characters on the argspec. This way we can
     # highlight them using css, in a similar way to what IPython does.
