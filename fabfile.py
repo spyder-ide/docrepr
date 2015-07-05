@@ -8,7 +8,7 @@ Simple fabric file to test oinspect output
 import webbrowser
 
 # 3rd party imports
-from IPython.core.oinspect import Inspector
+from IPython.core.oinspect import Inspector, object_info
 
 # Local imports
 import oinspect as oi
@@ -25,23 +25,26 @@ def _show_page(url):
 
 def test_basic():
     """Test with an empty context"""
-    oinfo = {'docstring': 'A test'}
-    url = spxy.rich_repr(oinfo, spxy.generate_context())
+    oinfo = object_info()
+    oinfo['docstring'] = 'A test'
+    url = spxy.rich_repr(oinfo)
     _show_page(url)
 
 
 def test_math():
     """Test a docstring with Latex on it"""
-    oinfo = {'docstring': 'This is some math :math:`a^2 = b^2 + c^2`'}
-    url = spxy.rich_repr(oinfo, spxy.generate_context())
+    oinfo = object_info()
+    oinfo['docstring'] = 'This is some math :math:`a^2 = b^2 + c^2`'
+    url = spxy.rich_repr(oinfo)
     _show_page(url)
 
 
 def test_no_render_math():
     """Test a docstring with Latex on it but without rendering it"""
-    oinfo = {'docstring': 'This is a rational number :math:`\\frac{x}{y}`'}
+    oinfo = object_info()
+    oinfo['docstring'] = 'This is a rational number :math:`\\frac{x}{y}`'
     oi.options['render_math'] = False
-    url = spxy.rich_repr(oinfo, spxy.generate_context())
+    url = spxy.rich_repr(oinfo)
     _show_page(url)
 
 
@@ -49,7 +52,8 @@ def test_numpy_sin():
     """Test for numpy.sin docstring"""
     import numpy as np
     oinfo = inspector.info(np.sin)
-    url = spxy.rich_repr(oinfo, spxy.generate_context(name='sin'))
+    oinfo['name'] = 'sin'
+    url = spxy.rich_repr(oinfo)
     _show_page(url)
 
 
@@ -57,8 +61,9 @@ def test_collapse():
     """Test the collapse option"""
     import numpy as np
     oinfo = inspector.info(np.sin)
+    oinfo['name'] = 'sin'
     oi.options['collapse_sections'] = True
-    url = spxy.rich_repr(oinfo, spxy.generate_context(name='sin'))
+    url = spxy.rich_repr(oinfo)
     _show_page(url)
 
 
@@ -66,8 +71,9 @@ def test_outline():
     """Test the outline option"""
     import numpy as np
     oinfo = inspector.info(np.sin)
+    oinfo['name'] = 'sin'
     oi.options['outline'] = True
-    url = spxy.rich_repr(oinfo, spxy.generate_context(name='sin'))
+    url = spxy.rich_repr(oinfo)
     _show_page(url)
 
 
@@ -79,8 +85,9 @@ def test_plot():
    >>> import matplotlib.pyplot as plt
    >>> plt.plot([1,2,3], [4,5,6])
 """
-    oinfo = {'docstring': docstring}
-    url = spxy.rich_repr(oinfo, spxy.generate_context())
+    oinfo = object_info()
+    oinfo['docstring'] = docstring
+    url = spxy.rich_repr(oinfo)
     _show_page(url)
 
 

@@ -18,6 +18,7 @@ http://doc.sagemath.org/html/en/reference/notebook/sagenb/misc/sphinxify.html
 
 # Stdlib imports
 import codecs
+import inspect
 import os
 import os.path as osp
 import shutil
@@ -70,6 +71,16 @@ def warning(message):
     return warning.render(css_path=CSS_PATH, text=message)
 
 
+def format_argspec(argspec):
+    """Format argspect, convenience wrapper around inspect's.
+
+    This takes a dict instead of ordered arguments and calls
+    inspect.format_argspec with the arguments in the necessary order.
+    """
+    return inspect.formatargspec(argspec['args'], argspec['varargs'],
+                                 argspec['varkw'], argspec['defaults'])
+
+
 def generate_conf(directory):
     """
     Generates a Sphinx configuration file in `directory`.
@@ -93,51 +104,16 @@ def generate_conf(directory):
     open(osp.join(directory, 'static', 'empty'), 'w').write('')
 
 
-def generate_context(name=None, argspec=None, note=None, img_path=''):
-    """
-    Generate the html_context dictionary for our Sphinx conf file.
-
-    This is a set of variables to be passed to the Jinja template engine and
-    that are used to control how the webpage is rendered in connection with
-    Sphinx
-
-    Parameters
-    ----------
-    name : str
-        Object's name.
-    note : str
-        A note describing what type has the function or method being
-        introspected
-    argspec : str
-        Argspec of the the function or method being introspected
-
-    Returns
-    -------
-    A dict of strings to be used by Jinja to generate the webpage
-    """
-    # Default values
-    if name is None:
-        name = 'foo'
-    if argspec is None:
-        argspec = '(...)'
-    if note is None:
-        note = 'Function of Bar module'
-
+def global_template_vars():
+    """Generate a dictionary of global variables for our templates"""
     if options['local_mathjax']:
         # TODO: Fix local use of MathJax
         MATHJAX_PATH = "file:///" + osp.join(JS_PATH, 'mathjax')
     else:
         MATHJAX_PATH = "https://cdn.mathjax.org/mathjax/latest"
 
-    context = \
+    global_vars = \
     {
-      # Arg dependent variables
-      'name': name,
-      'argspec': argspec,
-      'note': note,
-      'img_path': img_path,
-
-      # Static variables
       'css_path': CSS_PATH,
       'js_path': JS_PATH,
       'jquery_path': JQUERY_PATH,
@@ -149,7 +125,45 @@ def generate_context(name=None, argspec=None, note=None, img_path=''):
       'outline': options['outline']
     }
 
-    return context
+    return global_vars
+
+
+def init_template_vars(oinfo):
+    """
+    Initialize variables for our templates.
+
+    It gives default values to the most important variables
+    """
+    tmpl_vars = global_template_vars()
+    
+    # Object name
+    if oinfo['name'] is None:
+        tmpl_vars['name'] = 'foo'
+    else:
+        tmpl_vars['name'] = oinfo['name']
+
+    # Argspec
+    if oinfo['argspec'] is None:
+        tmpl_vars['argspec'] = '(...)'
+    else:
+        argspec = oinfo['argspec']
+        try:
+            has_self = argspec['args'][0] == 'self'
+        except (KeyError, IndexError):
+            tmpl_vars['argspec'] = '(...)'
+        else:
+            if has_self:
+                argspec['args'] = argspec['args'][1:]
+        tmpl_vars['argspec'] = format_argspec(argspec)
+
+    # Type
+    if oinfo['type_name'] is None:
+        tmpl_vars['note'] = 'Function of Bar module'
+    else:
+        tmpl_vars['note'] = '%s' % oinfo['type_name']
+
+    return tmpl_vars
+    
 
 
 def generate_extensions(render_math):
@@ -180,7 +194,7 @@ def generate_extensions(render_math):
 # Sphinxify
 #-----------------------------------------------------------------------------
 
-def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
+def sphinxify(docstring, srcdir, doc_type=None, output_format='html',
               temp_confdir=False):
     """
     Runs Sphinx on a docstring and outputs the processed content
@@ -189,10 +203,6 @@ def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
     ----------
     docstring : str
         a ReST-formatted docstring
-
-    context : dict
-        Variables to be passed to the layout template to control how its
-        rendered (through the Sphinx variable *html_context*)
 
     srcdir : str
         Source directory where Sphinx is going to be run
@@ -221,7 +231,8 @@ def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
 
     # This is needed so users can type \\ on latex eqnarray envs inside raw
     # docstrings
-    if context['math_on']:
+    template_vars = global_template_vars()
+    if template_vars['math_on']:
         docstring = docstring.replace('\\\\', '\\\\\\\\')
 
     # Write docstring to rst_name
@@ -241,7 +252,7 @@ def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
     extensions = generate_extensions(options['render_math'])
 
     # Override conf variables
-    confoverrides = {'html_context': context, 'extensions': extensions}
+    confoverrides = {'html_context': template_vars, 'extensions': extensions}
 
     # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
@@ -274,26 +285,22 @@ def sphinxify(docstring, context, srcdir, doc_type=None, output_format='html',
     return output
 
 
-def rich_repr(oinfo, context):
+def rich_repr(oinfo):
     """
-    Generate a rich docstring representation (as a web page)
+    Generate a rich representation of an object's docstring and several
+    other metadata associated with it.
 
-    This is done by processing plain-text rst through Sphinx and
-    adding several metadata of the object associated to the
-    docstring
+    These data are contained in an `oinfo` dict, as computed by the
+    IPython.core.oinspect library
 
     Parameters
     ----------
-    docstring : str
-        a ReST-formatted docstring
-
-    context : dict
-        Variables to be passed to the page template to control how its
-        rendered
+    oinfo : dict
+        An object info dictionary
 
     Returns
     -------
-    The url of the page that contains the rich representation 
+    The url of the page that contains the rich representation
     """
     # Create srcdir
     if not osp.isdir(CACHEDIR):
@@ -303,31 +310,33 @@ def rich_repr(oinfo, context):
 
     output_file = osp.join(srcdir, 'rich_repr_output.html')
 
+    template_vars = init_template_vars(oinfo)
+
     # Sphinxified dsocstring contents
-    obj_doc = sphinxify(oinfo['docstring'], context, srcdir)
-    context['docstring'] = obj_doc
+    obj_doc = sphinxify(oinfo['docstring'], srcdir)
+    template_vars['docstring'] = obj_doc
 
     if oinfo.get('class_docstring'):
-        class_doc = sphinxify(oinfo['class_docstring'], context, srcdir)
-        context['class_docstring'] = class_doc
+        class_doc = sphinxify(oinfo['class_docstring'], srcdir)
+        template_vars['class_docstring'] = class_doc
     else:
-        context['class_docstring'] = ''
+        template_vars['class_docstring'] = ''
 
     # Add a class to several characters on the argspec. This way we can
     # highlight them using css, in a similar way to what IPython does.
     # NOTE: Before doing this, we escape common html chars so that they
     # don't interfere with the rest of html present in the page
-    argspec = escape(context['argspec'])
+    argspec = escape(template_vars['argspec'])
     for char in ['=', ',', '(', ')', '*', '**']:
         argspec = argspec.replace(char,
                          '<span class="argspec-highlight">' + char + '</span>')
-    context['argspec'] = argspec
+    template_vars['argspec'] = argspec
 
     # Replace vars on the template
     env = Environment()
     env.loader = FileSystemLoader(osp.join(CONFDIR_PATH, 'templates'))
     page = env.get_template("rich_repr.html")
-    output = page.render(**context)
+    output = page.render(**template_vars)
 
     # Rewrite output contents after adjustments
     with open(output_file, 'wb') as f:
