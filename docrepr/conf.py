@@ -34,7 +34,7 @@ source_suffix = '.rst'
 master_doc = 'docstring'
 
 # General information about the project.
-project = u"OInspect library"
+project = u"Docrepr library"
 copyright = u''
 
 # List of directories, relative to source directory, that shouldn't be searched
