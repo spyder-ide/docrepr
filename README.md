@@ -8,8 +8,16 @@ the `sphinxify` module developed by Tim Dumol for the Sage Notebook and the
 
 The module renders dictionary as returned by IPython `oinspect` and exports
 two functions - **sphinxify** which uses Sphinx to render docstrings, and
-**rich_repr** that generates full HTML page with all assets from
-`IPython.core.oinspect` output and returns URL to it. 
+**rich_repr** that generates full HTML page (with all assets) from
+`IPython.core.oinspect` output and returns URL to it.
+
+Example:
+
+    >>> import docrepr, IPython
+    >>> myset = set()
+    >>> oinfo = IPython.core.oinspect.Inspector().info(myset, oname='myset')
+    >>> docrepr.sphinxify.rich_repr(oinfo)
+    c:\users\user\appdata\local\temp\docrepr\tmpwvoj3s\rich_repr_output.html
 
 # License
 
