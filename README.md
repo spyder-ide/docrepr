@@ -4,6 +4,12 @@ Docrepr is a library to render Python docstrings as html pages. It is based on
 the `sphinxify` module developed by Tim Dumol for the Sage Notebook and the
 `utils.inspector` one developed for Spyder.
 
+# Rationale
+
+Video presentation @ SciPy 2015 by Carlos Cordoba:
+
+[![Towards a Better Documentation System for Scientific Python | SciPy 2015 | Carlos Cordoba ](http://img.youtube.com/vi/q0r7FsDZU9s/0.jpg)](http://www.youtube.com/watch?v=q0r7FsDZU9s)
+
 # Details
 
 The module renders dictionary as returned by IPython `oinspect` and exports
