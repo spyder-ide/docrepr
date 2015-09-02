@@ -12,7 +12,7 @@ Video presentation @ SciPy 2015 by Carlos Cordoba:
 
 # Details
 
-The module renders dictionary as returned by IPython `oinspect` and exports
+The module renders dictionaries as returned by IPython `oinspect` and exports
 two functions - **sphinxify** which uses Sphinx to render docstrings, and
 **rich_repr** that generates full HTML page (with all assets) from
 `IPython.core.oinspect` output and returns URL to it.
