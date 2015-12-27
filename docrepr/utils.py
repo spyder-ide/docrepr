@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Utilities
+Utilities (taken from Spyder source code)
 """
 
 import locale
