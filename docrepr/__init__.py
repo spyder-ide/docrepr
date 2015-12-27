@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (c) 2009 Tim Dumol 
-# Copyright (c) 2012- Spyder Development team
+# Copyright (c) 2009 Tim Dumol
+# Copyright (c) 2013- The Spyder Development team
 #
-# Licensed under the terms of the MIT or BSD Licenses
-# (See every file for its license)
+# Licensed under the terms of the Modified BSD License
 
 """
 Docrepr library
