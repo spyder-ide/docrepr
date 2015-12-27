@@ -90,7 +90,7 @@ def test_outline():
 
 
 def test_plot():
-    """Test the outline option"""
+    """Test for plots"""
     docstring = """
 .. plot::
 
@@ -114,6 +114,7 @@ def test_docs_py():
 
 
 def test_no_doc():
+    """Test for no docstring"""
     oinfo = object_info()
     oinfo['docstring'] = '<no docstring>'
     url = spxy.rich_repr(oinfo)
