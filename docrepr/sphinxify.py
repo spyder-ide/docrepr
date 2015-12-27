@@ -41,7 +41,6 @@ from .utils import PY2, to_unicode_from_fs, to_binary_string
 #-----------------------------------------------------------------------------
 # Globals and constants
 #-----------------------------------------------------------------------------
-
 CONFDIR_PATH = osp.dirname(__file__)
 CSS_PATH = osp.join(CONFDIR_PATH, 'static', 'css')
 JS_PATH = osp.join(CONFDIR_PATH, 'js')
@@ -57,7 +56,6 @@ else:
 #-----------------------------------------------------------------------------
 # Utility functions
 #-----------------------------------------------------------------------------
-
 def is_sphinx_markup(docstring):
     """Returns whether a string contains Sphinx-style ReST markup."""
     # this could be made much more clever
@@ -200,7 +198,6 @@ def init_template_vars(oinfo):
         tmpl_vars['note'] = '%s' % oinfo['type_name']
 
     return tmpl_vars
-    
 
 
 def generate_extensions(render_math):
@@ -230,7 +227,6 @@ def generate_extensions(render_math):
 #-----------------------------------------------------------------------------
 # Sphinxify
 #-----------------------------------------------------------------------------
-
 def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     """
     Runs Sphinx on a docstring and outputs the processed content
