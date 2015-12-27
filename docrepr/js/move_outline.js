@@ -1,7 +1,7 @@
 //----------------------------------------------------------------------------
 //  Move Outline section to be the first one
 //
-//  Copyright 2014 by The Spyder development team
+//  Copyright (c) 2013- The Spyder Development Team
 //
 //  Distributed under the terms of the MIT License
 //----------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 //  Several utility functions to modify docstring webpages while they are
 //  rendered
 //
-//  Copyright (C) 2012 - The Spyder Team
+//  Copyright (C) 2013- The Spyder Development Team
 //
 //  Distributed under the terms of the MIT License.
 //----------------------------------------------------------------------------
