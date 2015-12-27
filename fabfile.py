@@ -11,7 +11,7 @@ import webbrowser
 from IPython.core.oinspect import Inspector, object_info
 
 # Local imports
-import docrepr as dr
+import docrepr
 import docrepr.sphinxify as spxy
 
 
@@ -55,7 +55,7 @@ def test_no_render_math():
     oinfo = object_info()
     oinfo['name'] = 'Foo'
     oinfo['docstring'] = 'This is a rational number :math:`\\frac{x}{y}`'
-    dr.options['render_math'] = False
+    docrepr.options['render_math'] = False
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
@@ -74,7 +74,7 @@ def test_collapse():
     import numpy as np
     oinfo = inspector.info(np.sin)
     oinfo['name'] = 'sin'
-    dr.options['collapse_sections'] = True
+    docrepr.options['collapse_sections'] = True
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
@@ -84,7 +84,7 @@ def test_outline():
     import numpy as np
     oinfo = inspector.info(np.sin)
     oinfo['name'] = 'sin'
-    dr.options['outline'] = True
+    docrepr.options['outline'] = True
     url = spxy.rich_repr(oinfo)
     _show_page(url)
 
