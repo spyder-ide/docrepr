@@ -52,12 +52,8 @@ def webview(obj, oname=''):
     if not Inspector:
         sys.exit("WebView requires IPython for dumping object info")
 
+    # See https://github.com/ipython/ipython/issues/8774 for documenting
+    # oinspect format. Use pprint(oinfo) in the meanwhile.
     oinfo = Inspector().info(obj, oname)
-
-    #from pprint import pprint
-    #pprint(oinfo)
-
     path = rich_repr(oinfo)
-    #print path
-    #print sphinxify(oinfo['docstring'])
     show_window('file:///' + path.replace('\\', '/'))
