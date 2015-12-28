@@ -35,6 +35,9 @@ if you have PyQt4 or PySide installed:
 `oname` is a just a name for the object, because Python loses it when
 variable is passed to function.
 
+![webview example](example.png)
+
+
 # License
 
 [Modified BSD License](LICENSE)
