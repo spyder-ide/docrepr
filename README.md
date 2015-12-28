@@ -28,9 +28,9 @@ Example:
 `docrepr` can also show a window with rendered documentation of a docstring
 if you have PyQt4 or PySide installed:
 
-    >>> from docrepr import webview
-    >>> s = set([1,2,3])
-    >>> webview(s, oname='s')
+    from docrepr import webview
+    s = set([1,2,3])
+    webview(s, oname='bar')
 
 `oname` is a just a name for the object, because Python loses it when
 variable is passed to function.
