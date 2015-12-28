@@ -9,9 +9,10 @@ public domain.
 
 [ ] position window at the center of the screen
     (right now it is middle bottom)
-[ ] implement lazy loading for PyQt4/PySide
+[x] implement lazy loading for PyQt4/PySide
 [ ] remove external dependency on
     IPython.core.oinspect.Inspector
+[ ] ensure that tmp is cleaned
 """
 
 
@@ -23,12 +24,13 @@ except ImportError:
     try:
         from PyQt4 import  QtGui, QtWebKit
     except ImportError:
-        sys.stderr.write("WebView requires PySide or PyQt4 for GUI window")
+        QtGui = QtWebKit = False
 
 try:
     from IPython.core.oinspect import Inspector
 except ImportError:
-        sys.stderr.write("WebView requires IPython for dumping object info")
+    Inspector = False
+
     
 from .sphinxify import rich_repr, sphinxify
 
@@ -43,7 +45,13 @@ def show_window(url):
     app.exec_()
 
 def webview(obj, oname=''):
-    """ Render in tmp and show from tmp """
+    """ Render HTML in tmp and show from tmp """
+    if not QtGui:
+        sys.exit("WebView requires PySide or PyQt4 for GUI window")
+
+    if not Inspector:
+        sys.exit("WebView requires IPython for dumping object info")
+
     oinfo = Inspector().info(obj, oname)
 
     #from pprint import pprint

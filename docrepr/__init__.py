@@ -15,7 +15,7 @@ belongs
 Derived from spyderlib.utils.inspector and IPython.core.oinspect
 """
 
-__version__ = '0.0.1'
+__version__ = '0.1'
 
 # Configuration options for docrepr
 options = {
@@ -26,7 +26,5 @@ options = {
     'outline': False
 }
 
-# This imports IPython and PySide/PyQt4
-# [ ] find a way to do delayed import
 from .webview import webview
 

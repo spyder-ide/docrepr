@@ -25,8 +25,8 @@ Example:
     >>> docrepr.sphinxify.rich_repr(oinfo)
     c:\users\user\appdata\local\temp\docrepr\tmpwvoj3s\rich_repr_output.html
 
-`docrepr` can also show GUI window with rendered HTML documentation if you
-have PyQt4 or PySide installed:
+`docrepr` can also show a window with rendered documentation of a docstring
+if you have PyQt4 or PySide installed:
 
     >>> from docrepr import webview
     >>> s = set([1,2,3])
