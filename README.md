@@ -25,7 +25,19 @@ Example:
     >>> docrepr.sphinxify.rich_repr(oinfo)
     c:\users\user\appdata\local\temp\docrepr\tmpwvoj3s\rich_repr_output.html
 
+`docrepr` can also show a window with rendered documentation of a docstring
+if you have PyQt4 or PySide installed:
+
+    from docrepr import webview
+    import numpy
+    webview(numpy.sin, oname='bar')
+
+`oname` is a just a name for the object, because Python loses it when
+variable is passed to function.
+
+![webview example](example.png)
+
+
 # License
 
-This project is distributed under the under the terms of the Modified BSD
-License
+[Modified BSD License](LICENSE)
