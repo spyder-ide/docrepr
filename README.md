@@ -37,5 +37,4 @@ variable is passed to function.
 
 # License
 
-This project is distributed under the under the terms of the Modified BSD
-License
+[Modified BSD License](LICENSE)
