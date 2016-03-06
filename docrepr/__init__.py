@@ -15,6 +15,8 @@ belongs
 Derived from spyderlib.utils.inspector and IPython.core.oinspect
 """
 
+from ._version import version_info, __version__
+
 # Configuration options for docrepr
 options = {
     'render_math': True,
