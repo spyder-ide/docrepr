@@ -12,18 +12,27 @@ Video presentation @ SciPy 2015 by Carlos Cordoba:
 
 # Details
 
-The module renders a dictionary as returned by IPython `oinspect` module and
-exports two functions: `sphinxify` which uses Sphinx to render docstrings,
-and `rich_repr` that generates full HTML page (with all assets) from
-`IPython.core.oinspect` output and returns a URL to it.
+The module renders a dictionary as returned by IPython `oinspect` module
+into a full HTML page (with all assets) from an object's docstring, by
+using the `rich_repr` function of its `sphinxify` submodule.
 
-Example:
+# Example of use
 
-    >>> import docrepr, IPython
-    >>> myset = set()
-    >>> oinfo = IPython.core.oinspect.Inspector().info(myset, oname='myset')
-    >>> docrepr.sphinxify.rich_repr(oinfo)
-    c:\users\user\appdata\local\temp\docrepr\tmpwvoj3s\rich_repr_output.html
+```python
+import webbrowser
+
+import docrepr                                # Set module options
+from docrepr import sphinxify                 # html generator
+from IPython.core.oinspect import Inspector   # oinfo generator
+
+import numpy as np
+
+oinfo = Inspector().info(np.sin)
+oinfo['name'] = 'sin'
+url = sphinxify.rich_repr(oinfo)
+
+webbrowser.open_new_tab(url)
+```
 
 # License
 
