@@ -17,6 +17,7 @@ setup(
     include_package_data=True,
     install_requires=['docutils', 'jinja2', 'sphinx'],
     url='https://github.com/spyder-ide/docrepr',
-    author='The Spyder Development Team',
+    author='Tim Dumol / The Spyder Development Team',
+    maintainer='The Spyder Development Team',
     license='BSD',
 )
