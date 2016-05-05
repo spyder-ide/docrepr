@@ -341,13 +341,27 @@ def rich_repr(oinfo):
     -------
     The url of the page that contains the rich representation
     """
+
+    output, srcdir = _rich_repr(oinfo)
+
+    output_file = osp.join(srcdir, 'rich_repr_output.html')
+    with open(output_file, 'wb') as f:
+        f.write(to_binary_string(_rich_repr(oinfo), encoding='utf-8'))
+
+    # Return output file name
+    return output_file
+
+def _rich_repr(oinfo):
+    """
+    Private version of rich_repr that return the content instead of the url
+    """
+
     # Create srcdir
     if not osp.isdir(CACHEDIR):
         os.mkdir(CACHEDIR)
     srcdir = tempfile.mkdtemp(dir=CACHEDIR)
     srcdir = to_unicode_from_fs(srcdir)
 
-    output_file = osp.join(srcdir, 'rich_repr_output.html')
 
     template_vars = init_template_vars(oinfo)
 
@@ -395,8 +409,4 @@ def rich_repr(oinfo):
     output = page.render(**template_vars)
 
     # Rewrite output contents after adjustments
-    with open(output_file, 'wb') as f:
-        f.write(to_binary_string(output, encoding='utf-8'))
-
-    # Return output file name
-    return output_file
+    return output, srcdir
