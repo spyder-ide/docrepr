@@ -50,7 +50,7 @@ if os.name == 'nt':
     CACHEDIR = tempfile.gettempdir() + osp.sep + 'docrepr'
 else:
     username = to_unicode_from_fs(os.environ.get('USER'))
-    CACHEDIR = tempfile.gettempdir() + osp.sep + 'docrepr-' + username
+    CACHEDIR = tempfile.gettempdir() + osp.sep + 'docrepr-' + str(username)
 
 
 #-----------------------------------------------------------------------------
