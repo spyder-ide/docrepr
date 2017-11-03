@@ -2,7 +2,7 @@
 
 `docrepr` renders Python docstrings in HTML. It is based on the `sphinxify`
 module developed by Tim Dumol for the Sage Notebook and the `utils.help`
-module developed for ther Spyder IDE.
+module developed for the Spyder IDE.
 
 # Rationale
 
