@@ -1,4 +1,6 @@
 include README.md
+include LICENSE
+include CHANGELOG.md
 recursive-include docrepr/static *.*
 recursive-include docrepr/js *.*
 recursive-include docrepr/templates *.*
