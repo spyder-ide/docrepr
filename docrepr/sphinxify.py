@@ -252,17 +252,23 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     """
     if docstring is None:
         docstring = ''
+
+    outdir = osp.join(srcdir, '_out')
+    try:
+        os.mkdir(outdir)
+    except OSError:
+        pass
     
     # Rst file to sphinxify
-    base_name = osp.join(srcdir, 'docstring')
-    rst_name = base_name + '.rst'
+    base_name = 'docstring'
+    rst_name = osp.join(srcdir, base_name + '.rst')
 
     # Output file name
     if output_format == 'html':
         suffix = '.html'
     else:
         suffix = '.txt'
-    output_name = base_name + suffix
+    output_name = osp.join(outdir, base_name + suffix)
 
     # This is needed so users can type \\ on latex eqnarray envs inside raw
     # docstrings
@@ -295,7 +301,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
     # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
-    sphinx_app = Sphinx(srcdir, confdir, srcdir, doctreedir, output_format,
+    sphinx_app = Sphinx(srcdir, confdir, outdir, doctreedir, output_format,
                         confoverrides, status=None, warning=None,
                         freshenv=True, warningiserror=False, tags=None)
 
