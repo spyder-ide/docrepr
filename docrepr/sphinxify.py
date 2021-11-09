@@ -172,7 +172,7 @@ def init_template_vars(oinfo):
 
     # Argspec
     tmpl_vars['argspec'] = ''
-    if oinfo['argspec'] is None:
+    if 'argspec' not in oinfo or oinfo['argspec'] is None:
         argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
         if argspec:
             tmpl_vars['argspec'] = argspec
@@ -250,6 +250,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     An Sphinx-processed string, in either HTML or plain text format, depending
     on the value of `output_format`
     """
+    output_format='text'
     if docstring is None:
         docstring = ''
     
@@ -262,7 +263,9 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         suffix = '.html'
     else:
         suffix = '.txt'
-    output_name = base_name + suffix
+    from tempfile import gettempdir
+    destdir = gettempdir()
+    output_name = osp.join(destdir, 'docstring') + suffix
 
     # This is needed so users can type \\ on latex eqnarray envs inside raw
     # docstrings
@@ -295,8 +298,9 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
     # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
-    sphinx_app = Sphinx(srcdir, confdir, srcdir, doctreedir, output_format,
-                        confoverrides, status=None, warning=None,
+    print(f"AHMED destdir={destdir}, srcdir={srcdir}")
+    sphinx_app = Sphinx(srcdir, confdir, destdir, doctreedir,  output_format,
+                        confoverrides,
                         freshenv=True, warningiserror=False, tags=None)
 
     # Run the app
@@ -304,7 +308,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         sphinx_app.build(None, [rst_name])
     except SystemMessage:
         # TODO: Make this message configurable, so that it can be translated
-        error_message = "It was not possible to get rich help for this object"
+        error_message = "(A) It was not possible to get rich help for this object"
         output = warning(error_message)
         return output
 
@@ -313,7 +317,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         output = codecs.open(output_name, 'r', encoding='utf-8').read()
         output = output.replace('<pre>', '<pre class="literal-block">')
     else:
-        error_message = "It was not possible to get rich help for this object"
+        error_message = "(B) It was not possible to get rich help for this object " + output_name
         output = warning(error_message)
 
     # Remove temp confdir
