@@ -250,7 +250,6 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     An Sphinx-processed string, in either HTML or plain text format, depending
     on the value of `output_format`
     """
-    output_format='text'
     if docstring is None:
         docstring = ''
     
@@ -263,8 +262,8 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         suffix = '.html'
     else:
         suffix = '.txt'
-    from tempfile import gettempdir
-    destdir = gettempdir()
+    from tempfile import mkdtemp
+    destdir = mkdtemp()
     output_name = osp.join(destdir, 'docstring') + suffix
 
     # This is needed so users can type \\ on latex eqnarray envs inside raw
@@ -298,7 +297,6 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
     # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
-    print(f"AHMED destdir={destdir}, srcdir={srcdir}")
     sphinx_app = Sphinx(srcdir, confdir, destdir, doctreedir,  output_format,
                         confoverrides,
                         freshenv=True, warningiserror=False, tags=None)
