@@ -306,7 +306,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         sphinx_app.build(None, [rst_name])
     except SystemMessage:
         # TODO: Make this message configurable, so that it can be translated
-        error_message = "(A) It was not possible to get rich help for this object"
+        error_message = "It was not possible to get rich help for this object"
         output = warning(error_message)
         return output
 
@@ -315,7 +315,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         output = codecs.open(output_name, 'r', encoding='utf-8').read()
         output = output.replace('<pre>', '<pre class="literal-block">')
     else:
-        error_message = "(B) It was not possible to get rich help for this object " + output_name
+        error_message = "It was not possible to get rich help for this object"
         output = warning(error_message)
 
     # Remove temp confdir
