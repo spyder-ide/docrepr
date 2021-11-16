@@ -298,7 +298,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
     sphinx_app = Sphinx(srcdir, confdir, destdir, doctreedir,  output_format,
-                        confoverrides,
+                        confoverrides, status=None, warning=None,
                         freshenv=True, warningiserror=False, tags=None)
 
     # Run the app
