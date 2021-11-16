@@ -172,7 +172,7 @@ def init_template_vars(oinfo):
 
     # Argspec
     tmpl_vars['argspec'] = ''
-    if 'argspec' not in oinfo or oinfo['argspec'] is None:
+    if oinfo.get('argspec', None) is None:
         argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
         if argspec:
             tmpl_vars['argspec'] = argspec
@@ -262,8 +262,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         suffix = '.html'
     else:
         suffix = '.txt'
-    from tempfile import mkdtemp
-    destdir = mkdtemp()
+    destdir = tempfile.mkdtemp()
     output_name = osp.join(destdir, 'docstring') + suffix
 
     # This is needed so users can type \\ on latex eqnarray envs inside raw
@@ -297,7 +296,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
     # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
-    sphinx_app = Sphinx(srcdir, confdir, destdir, doctreedir,  output_format,
+    sphinx_app = Sphinx(srcdir, confdir, destdir, doctreedir, output_format,
                         confoverrides, status=None, warning=None,
                         freshenv=True, warningiserror=False, tags=None)
 
