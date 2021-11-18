@@ -17,7 +17,6 @@ http://doc.sagemath.org/html/en/reference/notebook/sagenb/misc/sphinxify.html
 """
 
 # Stdlib imports
-import codecs
 import inspect
 import os
 import os.path as osp
@@ -172,7 +171,7 @@ def init_template_vars(oinfo):
 
     # Argspec
     tmpl_vars['argspec'] = ''
-    if oinfo['argspec'] is None:
+    if oinfo.get('argspec', None) is None:
         argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
         if argspec:
             tmpl_vars['argspec'] = argspec
@@ -262,7 +261,6 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         suffix = '.html'
     else:
         suffix = '.txt'
-    output_name = base_name + suffix
 
     # This is needed so users can type \\ on latex eqnarray envs inside raw
     # docstrings
@@ -275,7 +273,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
         template_vars['warn_message'] = "No documentation available"
 
     # Write docstring to rst_name
-    with codecs.open(rst_name, 'w', encoding='utf-8') as rst_file:
+    with open(rst_name, 'w', encoding='utf-8') as rst_file:
         rst_file.write(docstring)
 
     # Create confdir
@@ -295,26 +293,29 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
     # Create Sphinx app
     doctreedir = osp.join(srcdir, 'doctrees')
-    sphinx_app = Sphinx(srcdir, confdir, srcdir, doctreedir, output_format,
-                        confoverrides, status=None, warning=None,
-                        freshenv=True, warningiserror=False, tags=None)
+    with tempfile.TemporaryDirectory() as destdir:
+        output_name = osp.join(destdir, 'docstring') + suffix
+        sphinx_app = Sphinx(srcdir, confdir, destdir, doctreedir, output_format,
+                            confoverrides, status=None, warning=None,
+                            freshenv=True, warningiserror=False, tags=None)
 
-    # Run the app
-    try:
-        sphinx_app.build(None, [rst_name])
-    except SystemMessage:
-        # TODO: Make this message configurable, so that it can be translated
-        error_message = "It was not possible to get rich help for this object"
-        output = warning(error_message)
-        return output
+        # Run the app
+        try:
+            sphinx_app.build(None, [rst_name])
+        except SystemMessage:
+            # TODO: Make this message configurable, so that it can be translated
+            error_message = "It was not possible to get rich help for this object"
+            output = warning(error_message)
+            return output
 
-    # Some adjustments to the output
-    if osp.exists(output_name):
-        output = codecs.open(output_name, 'r', encoding='utf-8').read()
-        output = output.replace('<pre>', '<pre class="literal-block">')
-    else:
-        error_message = "It was not possible to get rich help for this object"
-        output = warning(error_message)
+        # Some adjustments to the output
+        if osp.exists(output_name):
+            with open(output_name, 'r', encoding='utf-8') as fid:
+                output = fid.read()
+            output = output.replace('<pre>', '<pre class="literal-block">')
+        else:
+            error_message = "It was not possible to get rich help for this object"
+            output = warning(error_message)
 
     # Remove temp confdir
     if temp_confdir:
