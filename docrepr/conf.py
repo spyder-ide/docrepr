@@ -21,11 +21,8 @@ sys.path.append(os.path.abspath('./sphinxext'))
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['templates']
 
-# MathJax load path (doesn't have effect for sphinx 1.0-)
+# MathJax load path
 mathjax_path = 'MathJax/MathJax.js'
-
-# JsMath load path (doesn't have effect for sphinx 1.1+)
-jsmath_path = 'easy/load.js'
 
 # The suffix of source filenames.
 source_suffix = '.rst'

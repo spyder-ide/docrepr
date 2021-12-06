@@ -201,16 +201,12 @@ def init_template_vars(oinfo):
 
 def generate_extensions(render_math):
     """Generate list of Sphinx extensions"""
-    # We need jsmath to get pretty plain-text latex in docstrings
-    extensions = []
-    if sphinx.__version__ < "1.1" or not render_math:
-        extensions = ['sphinx.ext.jsmath']
-    else:
-        extensions = ['sphinx.ext.mathjax']
-
     # For scipy and matplotlib docstrings, which need this extension to
     # be rendered correctly (see Spyder Issue #1138)
-    extensions.append('sphinx.ext.autosummary')
+    extensions = ['sphinx.ext.autosummary']
+
+    if render_math:
+        extensions.append('sphinx.ext.mathjax')
 
     # Plots
     try:
@@ -251,7 +247,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     """
     if docstring is None:
         docstring = ''
-    
+
     # Rst file to sphinxify
     base_name = osp.join(srcdir, 'docstring')
     rst_name = base_name + '.rst'
