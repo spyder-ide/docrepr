@@ -205,6 +205,7 @@ def generate_extensions(render_math):
     # be rendered correctly (see Spyder Issue #1138)
     extensions = ['sphinx.ext.autosummary']
 
+     # We need mathjax to get pretty plain-text latex in docstrings
     if render_math:
         extensions.append('sphinx.ext.mathjax')
 
