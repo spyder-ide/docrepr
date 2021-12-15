@@ -314,6 +314,9 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
             error_message = "It was not possible to get rich help for this object"
             output = warning(error_message)
 
+        # Merge the srcdir and destdir
+        shutil.copytree(destdir, srcdir, dirs_exist_ok=True)
+
     # Remove temp confdir
     if temp_confdir:
         shutil.rmtree(confdir, ignore_errors=True)
