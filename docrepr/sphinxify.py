@@ -213,7 +213,7 @@ def generate_extensions(render_math):
     try:
         # TODO: Add an option to avoid importing mpl every time
         import matplotlib   # analysis:ignore
-        extensions.append('plot_directive')
+        extensions.append('matplotlib.sphinxext.plot_directive')
     except ImportError:
         pass
 

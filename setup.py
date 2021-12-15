@@ -16,6 +16,9 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=['docutils', 'jinja2', 'sphinx>=1.1'],
+    extras_require={
+        'plot': ['matplotlib>=2.2.4']
+    },
     url='https://github.com/spyder-ide/docrepr',
     author='Tim Dumol / The Spyder Development Team',
     maintainer='The Spyder Development Team',
