@@ -14,7 +14,7 @@ belongs
 Derived from spyderlib.utils.inspector and IPython.core.oinspect
 """
 
-from ._version import version_info, __version__
+__version__ = '0.2.0.dev0'
 
 # Configuration options for docrepr
 options = {
