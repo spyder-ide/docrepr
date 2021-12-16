@@ -15,6 +15,7 @@ setup(
     long_description='docrepr renders Python docstrings in HTML. It is based on the sphinxify module developed by Tim Dumol for the Sage Notebook and the utils.inspector developed for ther Spyder IDE.',
     packages=find_packages(),
     include_package_data=True,
+    python_requires='>=3.6',
     install_requires=['docutils', 'jinja2', 'sphinx>=1.1'],
     extras_require={
         'plot': ['matplotlib>=2.2.4']

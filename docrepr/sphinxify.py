@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*
-
 """
 Process docstrings with Sphinx
 
@@ -24,17 +22,17 @@ import re
 import shutil
 import sys
 import tempfile
+from pathlib import Path
 from xml.sax.saxutils import escape
 
 # 3rd party imports
 from docutils.utils import SystemMessage as SystemMessage
 from jinja2 import Environment, FileSystemLoader
-import sphinx
 from sphinx.application import Sphinx
 
 # Local imports
 from . import options
-from .utils import PY2, to_unicode_from_fs, to_binary_string
+from .utils import to_unicode_from_fs
 
 
 #-----------------------------------------------------------------------------
@@ -127,8 +125,8 @@ def generate_conf(directory):
     os.makedirs(osp.join(directory, 'static'))
     shutil.copy(conf, directory)
     shutil.copy(layout, osp.join(directory, 'templates'))
-    open(osp.join(directory, '__init__.py'), 'w').write('')
-    open(osp.join(directory, 'static', 'empty'), 'w').write('')
+    (Path(directory) / '__init__.py').touch()
+    (Path(directory) / 'static' / 'empty').touch()
 
 
 def global_template_vars():
@@ -307,7 +305,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
         # Some adjustments to the output
         if osp.exists(output_name):
-            with open(output_name, 'r', encoding='utf-8') as fid:
+            with open(output_name, encoding='utf-8') as fid:
                 output = fid.read()
             output = output.replace('<pre>', '<pre class="literal-block">')
         else:
@@ -371,12 +369,8 @@ def rich_repr(oinfo):
         if not any([d in file_def for d in lib_dirs]):
             mod = file_def.split(os.sep)[-1]
             mod_name = mod.split('.')[0]
-            if PY2:
-                link = "https://docs.python.org/2/library/{0}.html#{0}.{1}".format(
-                        mod_name, oinfo['name'])
-            else:
-                link = "https://docs.python.org/3/library/{0}.html#{0}.{1}".format(
-                        mod_name, oinfo['name'])
+            link = ('https://docs.python.org/3/library/{0}.html#{0}.{1}'
+                    .format(mod_name, oinfo['name']))
             template_vars['docs_py_org'] = link
 
     # Add a class to several characters on the argspec. This way we can
@@ -396,8 +390,8 @@ def rich_repr(oinfo):
     output = page.render(**template_vars)
 
     # Rewrite output contents after adjustments
-    with open(output_file, 'wb') as f:
-        f.write(to_binary_string(output, encoding='utf-8'))
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write(output)
 
     # Return output file name
     return output_file

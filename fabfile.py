@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*
-
 """
 Simple fabric file to test docrepr output
 """

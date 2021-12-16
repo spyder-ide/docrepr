@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright (c) 2009 Tim Dumol
 # Copyright (c) 2013- The Spyder Development team

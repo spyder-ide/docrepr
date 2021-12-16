@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright (C) 2009 Tim Dumol <tim@timdumol.com>
 # Copyright (C) 2013- The Spyder Development Team
@@ -31,8 +30,8 @@ source_suffix = '.rst'
 master_doc = 'docstring'
 
 # General information about the project.
-project = u"Docrepr library"
-copyright = u''
+project = "Docrepr library"
+copyright = ''
 
 # List of directories, relative to source directory, that shouldn't be searched
 # for source files.
