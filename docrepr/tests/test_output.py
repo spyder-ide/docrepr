@@ -3,6 +3,7 @@
 # Standard library imports
 import copy
 import subprocess
+import sys
 from pathlib import Path
 
 # Third party imports
@@ -17,7 +18,7 @@ import docrepr.sphinxify as sphinxify
 
 # ---- Test data
 
-LONG_DOCSTRING = """
+PLOT_DOCSTRING = """
 .. plot::
 
    >>> import matplotlib.pyplot as plt
@@ -76,7 +77,7 @@ TEST_CASES = {
         'obj': None,
         'oinfo': {
             'name': 'Foo',
-            'docstring': LONG_DOCSTRING
+            'docstring': PLOT_DOCSTRING
             },
         'options': {},
         },
@@ -138,13 +139,23 @@ def test_sphinxify(
         build_oinfo, set_docrepr_options, open_browser,
         obj, oinfo_data, docrepr_options,
         ):
+    if (oinfo_data.get("docstring", None) == PLOT_DOCSTRING
+            and sys.version_info.major == 3
+            and sys.version_info.minor == 6
+            and sys.platform.startswith("win")):
+        pytest.skip(
+            "Plot fails on Py3.6 on Windows; older version of Matplotlib?")
+
     oinfo = build_oinfo(obj, **oinfo_data)
     set_docrepr_options(**docrepr_options)
+
     url = sphinxify.rich_repr(oinfo)
+
     output_file = Path(url)
     assert output_file.is_file()
     assert output_file.suffix == '.html'
     assert output_file.stat().st_size > 512
     file_text = output_file.read_text(encoding='utf-8', errors='strict')
     assert len(file_text) > 512
+
     open_browser(url)

@@ -26,13 +26,13 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 # 3rd party imports
-from docutils.utils import SystemMessage as SystemMessage
+from docutils.utils import SystemMessage
 from jinja2 import Environment, FileSystemLoader
 from sphinx.application import Sphinx
 
 # Local imports
 from . import options
-from .utils import to_unicode_from_fs
+from .utils import merge_directories, to_unicode_from_fs
 
 
 #-----------------------------------------------------------------------------
@@ -313,7 +313,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
             output = warning(error_message)
 
         # Merge the srcdir and destdir
-        shutil.copytree(destdir, srcdir, dirs_exist_ok=True)
+        merge_directories(destdir, srcdir)
 
     # Remove temp confdir
     if temp_confdir:

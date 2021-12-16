@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.8', '3.9']
+        python-version: ['3.6', '3.10']
     steps:
     - name: Checkout branch
       uses: actions/checkout@v2
@@ -42,7 +42,7 @@ jobs:
       run: python -bb -X dev -W error -m build
     - name: Install wheel
       shell: bash
-      run: 'echo dist/*.whl | xargs -I % python -bb -X dev -W error -m pip install --upgrade %[test]'
+      run: 'echo dist/*.whl | xargs -I % python -bb -X dev -W error -W ignore::DeprecationWarning:pip._internal.locations._distutils -W ignore::DeprecationWarning:distutils.command.install -m pip install --upgrade %[test]'
     - name: List packages in environment
       run: pip list
     - name: Run tests
