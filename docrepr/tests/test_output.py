@@ -1,6 +1,4 @@
-"""
-Simple fabric file to test docrepr output
-"""
+"""Simple tests of docrepr's output."""
 
 # Stdlib imports
 import webbrowser
@@ -117,14 +115,3 @@ def test_no_doc():
     oinfo['docstring'] = '<no docstring>'
     url = spxy.rich_repr(oinfo)
     _show_page(url)
-
-
-def test_all():
-    """Run all tests"""
-    test_basic()
-    test_math()
-    test_no_render_math()
-    test_numpy_sin()
-    test_collapse()
-    test_outline()
-    test_plot()
