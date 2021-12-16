@@ -1,0 +1,54 @@
+# Run the project's test suite
+name: Tests
+
+on:
+  push:
+    branches:
+    - master
+    - main
+    - '*.x'
+  pull_request:
+    branches:
+    - master
+    - main
+    - '*.x'
+
+jobs:
+  test:
+    name: Test Python ${{ matrix.python-version }} ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.8', '3.9']
+    steps:
+    - name: Checkout branch
+      uses: actions/checkout@v2
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Print basic Python info
+      shell: python
+      run: |
+        import sys
+        print(sys.executable, sys.version, sep='\n')
+    - name: Install baseline deps
+      run: python -m pip install --upgrade pip setuptools wheel
+    - name: Install build deps
+      run: python -m pip install --upgrade --upgrade-strategy eager build pip setuptools wheel
+    - name: Build package
+      run: python -bb -X dev -W error -m build
+    - name: Install wheel
+      shell: bash
+      run: 'echo dist/*.whl | xargs -I % python -bb -X dev -W error -m pip install --upgrade %[test]'
+    - name: List packages in environment
+      run: pip list
+    - name: Run tests
+      shell: bash
+      run: python -I -bb -X dev -W error -m pytest
+    - name: Twine check
+      run: pipx run twine check --strict dist/*
+    - name: Pip check
+      run: pip check -v
