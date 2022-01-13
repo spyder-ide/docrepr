@@ -1,4 +1,8 @@
+include AUTHORS.md
+include CHANGELOG.md
+include LICENSE.txt
 include README.md
+include conftest.py
 recursive-include docrepr/static *.*
 recursive-include docrepr/js *.*
 recursive-include docrepr/templates *.*

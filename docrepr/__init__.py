@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Copyright (c) 2009 Tim Dumol
 # Copyright (c) 2013- The Spyder Development team
@@ -15,7 +14,7 @@ belongs
 Derived from spyderlib.utils.inspector and IPython.core.oinspect
 """
 
-from ._version import version_info, __version__
+__version__ = '0.2.0.dev0'
 
 # Configuration options for docrepr
 options = {
