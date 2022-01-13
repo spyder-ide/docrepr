@@ -1,6 +1,7 @@
 """Setup for Pytest."""
 
 # Standard library imports
+import warnings
 import webbrowser
 
 # Third party imports
@@ -31,5 +32,8 @@ def open_browser(request):
     """Show the passed URL in the user's web browser if passed."""
     def _open_browser(url):
         if request.config.getoption(OPEN_BROWSER_OPTION):
+            warnings.filterwarnings(
+                'ignore', category=ResourceWarning, module='subprocess.*')
+
             webbrowser.open_new_tab(url)
     return _open_browser
