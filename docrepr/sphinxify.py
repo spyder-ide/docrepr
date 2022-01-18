@@ -51,7 +51,7 @@ else:
     CACHEDIR = tempfile.gettempdir() + osp.sep + 'docrepr-' + str(username)
 
 DOCSTRING_TEMPLATE = """
-.. py:{kind}:: {name}{definition}
+.. py:{type_name}:: {name}{definition}
 
 {docstring}
 """
@@ -225,64 +225,63 @@ def generate_extensions(render_math):
     return extensions
 
 
-def wrap_docstring(oinfo):
+def wrap_docstring(docstring, name=None, type_name=None, definition=None):
     """Generate a docstring wrapped in the appropriate Sphinx domain."""
     should_wrap_docstring = bool(
-        oinfo['docstring']
-        and is_sphinx_markup(oinfo['docstring'])
-        and (oinfo['docstring'] != '<no docstring>')
-        and oinfo.get('type_name')
-        and oinfo.get('name')
+        docstring
+        and is_sphinx_markup(docstring)
+        and (docstring != '<no docstring>')
+        and type_name
+        and name
         )
     if not should_wrap_docstring:
-        return oinfo['docstring']
+        return docstring
 
-    if oinfo.get('definition'):
-        formatted_definition = oinfo.get('definition')
-    elif oinfo.get('init_definition'):
-        formatted_definition = oinfo.get('init_definition')
-    else:
-        formatted_definition = ''
-    if formatted_definition:
-        formatted_definition = re.sub(r'\(\n\s*', '(', formatted_definition)
-        formatted_definition = re.sub(r',\n\s*\)', ')', formatted_definition)
-        formatted_definition = re.sub(r',\n\s*', ', ', formatted_definition)
-        formatted_definition = formatted_definition.replace('\n', ' ')
+    indented_docstring = textwrap.indent(docstring, ' ' * 3)
 
-    indented_docstring = textwrap.indent(oinfo['docstring'], ' ' * 3)
-
-    type_name = oinfo['type_name']
     if type_name not in [
             'function', 'method', 'property', 'attribute', 'module']:
         type_name = 'class'
 
+    if definition:
+        definition = re.sub(r'\(\n\s*', '(', definition)
+        definition = re.sub(r',\n\s*\)', ')', definition)
+        definition = re.sub(r',\n\s*', ', ', definition)
+        definition = definition.replace('\n', ' ')
+    else:
+        definition = ''
+
     wrapped_docstring = DOCSTRING_TEMPLATE.format(
-        kind=type_name,
-        name=oinfo['name'],
-        definition=formatted_definition,
+        type_name=type_name,
+        name=name,
+        definition=definition,
         docstring=indented_docstring,
         )
     return wrapped_docstring
 
 
-def wrap_class_docstring(oinfo):
-    """Wrap a class docstring wrapped in a Sphinx domain."""
-    should_wrap_docstring = bool(
-        oinfo.get('class_docstring')
-        and is_sphinx_markup(oinfo['class_docstring'])
-        and (oinfo['class_docstring'] != '<no docstring>')
-        and oinfo.get('type_name')
+def wrap_main_docstring(oinfo):
+    """Wrap an object's main docstring in the appropriate Sphinx domain."""
+    if oinfo.get('definition'):
+        definition = oinfo.get('definition')
+    else:
+        definition = oinfo.get('init_definition')
+
+    wrapped_docstring = wrap_docstring(
+        docstring = oinfo['docstring'],
+        name = oinfo.get('name'),
+        type_name = oinfo.get('type_name'),
+        definition = definition
         )
-    if not should_wrap_docstring:
-        return oinfo.get('class_docstring', '')
+    return wrapped_docstring
 
-    indented_docstring = textwrap.indent(oinfo['class_docstring'], ' ' * 3)
 
-    wrapped_docstring = DOCSTRING_TEMPLATE.format(
-        kind='class',
-        name=oinfo['type_name'],
-        definition='',
-        docstring=indented_docstring,
+def wrap_class_docstring(oinfo):
+    """Wrap an object's class docstring wrapped in a Sphinx domain."""
+    wrapped_docstring = wrap_docstring(
+        docstring = oinfo.get('class_docstring'),
+        name = oinfo.get('type_name'),
+        type_name = 'class',
         )
     return wrapped_docstring
 
@@ -420,7 +419,7 @@ def rich_repr(oinfo):
     template_vars = init_template_vars(oinfo)
 
     # Wrap docstring in Sphinx directive for appropriate processing
-    wrapped_docstring = wrap_docstring(oinfo)
+    wrapped_docstring = wrap_main_docstring(oinfo)
 
     # Sphinxified dsocstring contents
     obj_doc = sphinxify(wrapped_docstring, srcdir)

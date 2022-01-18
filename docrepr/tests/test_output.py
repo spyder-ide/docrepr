@@ -30,11 +30,13 @@ def get_random_ingredients(kind=None):
     :rtype: list[str]
 
     """
+    if 'spam' in kind:
+        return ['spam', 'spam', 'eggs', 'spam']
     return ['eggs', 'bacon', 'spam']
 
 
 # A sample class to test
-class SpamCans(object):
+class SpamCans:
     """
     Cans of spam.
 
@@ -89,17 +91,17 @@ TEST_CASES = {
             },
         'options': {},
         },
-    'function': {
+    'function_sphinx': {
         'obj': get_random_ingredients,
         'oinfo': {'name': 'get_random_ingredients'},
         'options': {},
         },
-    'class': {
+    'class_sphinx': {
         'obj': SpamCans,
         'oinfo': {'name': 'SpamCans'},
         'options': {},
         },
-    'method': {
+    'method_sphinx': {
         'obj': SpamCans().eat_one,
         'oinfo': {'name': 'SpamCans.eat_one'},
         'options': {},
