@@ -70,8 +70,8 @@ def warning(message):
     """Print a warning message on the rich text view"""
     env = Environment()
     env.loader = FileSystemLoader(osp.join(CONFDIR_PATH, 'templates'))
-    warning = env.get_template("warning.html")
-    return warning.render(css_path=CSS_PATH, text=message)
+    warning_template = env.get_template('warning.html')
+    return warning_template.render(css_path=CSS_PATH, text=message)
 
 
 def format_argspec(argspec):
@@ -109,8 +109,7 @@ def getsignaturefromtext(text, objname):
         sig = all_sigs[0]
         sig = '(' + sig.split('(')[-1] # Remove objname
         return sig
-    else:
-        return ''
+    return ''
 
 
 def generate_conf(directory):
@@ -438,7 +437,7 @@ def rich_repr(oinfo):
     file_def = oinfo.get('file')
     if file_def:
         lib_dirs = ['site-packages', 'dist-packages', 'pymodules']
-        if not any([d in file_def for d in lib_dirs]):
+        if not any(d in file_def for d in lib_dirs):
             mod = file_def.split(os.sep)[-1]
             mod_name = mod.split('.')[0]
             link = ('https://docs.python.org/3/library/{0}.html#{0}.{1}'

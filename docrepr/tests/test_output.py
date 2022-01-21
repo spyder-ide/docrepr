@@ -13,7 +13,7 @@ from IPython.core.oinspect import Inspector, object_info
 
 # Local imports
 import docrepr
-import docrepr.sphinxify as sphinxify
+import docrepr.sphinxify
 
 
 # ---- Test data
@@ -218,7 +218,7 @@ def test_sphinxify(
     oinfo = build_oinfo(obj, **oinfo_data)
     set_docrepr_options(**docrepr_options)
 
-    url = sphinxify.rich_repr(oinfo)
+    url = docrepr.sphinxify.rich_repr(oinfo)
 
     output_file = Path(url)
     assert output_file.is_file()
