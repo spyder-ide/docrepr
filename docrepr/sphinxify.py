@@ -67,7 +67,7 @@ def is_sphinx_markup(docstring):
 
 
 def warning(message):
-    """Print a warning message on the rich text view"""
+    """Print a warning message on the rich text view."""
     env = Environment()
     env.loader = FileSystemLoader(osp.join(CONFDIR_PATH, 'templates'))
     warning_template = env.get_template('warning.html')
@@ -85,7 +85,7 @@ def format_argspec(argspec):
 
 
 def getsignaturefromtext(text, objname):
-    """Get object signatures from text (object documentation)
+    """Get object signatures from text (object documentation).
 
     Return a list containing a single string in most cases
     Example of multiple signatures: PyQt4 objects
@@ -101,7 +101,8 @@ def getsignaturefromtext(text, objname):
     multiline_end_parenleft_re = r'(%s\([^\)]+(\),\n.+)+(?<=[\w\]\}\'"])\))'
     # Grabbing signatures
     sigs_1 = re.findall(oneline_re + '|' + multiline_re, text)
-    sigs_2 = [g[0] for g in re.findall(multiline_end_parenleft_re % objname, text)]
+    sigs_2 = [g[0] for g in re.findall(
+        multiline_end_parenleft_re % objname, text)]
     all_sigs = sigs_1 + sigs_2
     # The most relevant signature is usually the first one. There could be
     # others in doctests but those are not so important
@@ -114,7 +115,7 @@ def getsignaturefromtext(text, objname):
 
 def generate_conf(directory):
     """
-    Generates a Sphinx configuration file in `directory`.
+    Generate a Sphinx configuration file in `directory`.
 
     Parameters
     ----------
@@ -136,24 +137,23 @@ def generate_conf(directory):
 
 
 def global_template_vars():
-    """Generate a dictionary of global variables for our templates"""
+    """Generate a dictionary of global variables for our templates."""
     if options['local_mathjax']:
         # TODO: Fix local use of MathJax
-        MATHJAX_PATH = "file:///" + osp.join(JS_PATH, 'mathjax')
+        mathjax_path = 'file:///' + osp.join(JS_PATH, 'mathjax')
     else:
-        MATHJAX_PATH = "https://cdn.mathjax.org/mathjax/latest"
+        mathjax_path = 'https://cdn.mathjax.org/mathjax/latest'
 
-    global_vars = \
-    {
-      'css_path': CSS_PATH,
-      'js_path': JS_PATH,
-      'jquery_path': JQUERY_PATH,
-      'mathjax_path': MATHJAX_PATH,
-      'math_on': 'true' if options['render_math'] else '',
-      'platform': sys.platform,
-      'collapse': options['collapse_sections'],
-      'use_qt4': options['use_qt4'],
-      'outline': options['outline']
+    global_vars = {
+        'css_path': CSS_PATH,
+        'js_path': JS_PATH,
+        'jquery_path': JQUERY_PATH,
+        'mathjax_path': mathjax_path,
+        'math_on': 'true' if options['render_math'] else '',
+        'platform': sys.platform,
+        'collapse': options['collapse_sections'],
+        'use_qt4': options['use_qt4'],
+        'outline': options['outline'],
     }
 
     return global_vars
@@ -163,7 +163,7 @@ def init_template_vars(oinfo):
     """
     Initialize variables for our templates.
 
-    It gives default values to the most important variables
+    It gives default values to the most important variables.
     """
     tmpl_vars = global_template_vars()
 
@@ -184,7 +184,8 @@ def init_template_vars(oinfo):
         try:
             has_self = argspec['args'][0] == 'self'
         except (KeyError, IndexError):
-            fmt_argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
+            fmt_argspec = getsignaturefromtext(
+                oinfo['docstring'], oinfo['name'])
             if fmt_argspec:
                 tmpl_vars['argspec'] = fmt_argspec
             else:
@@ -204,7 +205,7 @@ def init_template_vars(oinfo):
 
 
 def generate_extensions(render_math):
-    """Generate list of Sphinx extensions"""
+    """Generate a list of Sphinx extensions."""
     # For scipy and matplotlib docstrings, which need this extension to
     # be rendered correctly (see Spyder Issue #1138)
     extensions = ['sphinx.ext.autosummary']
@@ -290,7 +291,7 @@ def wrap_class_docstring(oinfo):
 #-----------------------------------------------------------------------------
 def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     """
-    Runs Sphinx on a docstring and outputs the processed content
+    Run Sphinx on a docstring and outputs the processed content.
 
     Parameters
     ----------
@@ -300,7 +301,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     srcdir : str
         Source directory where Sphinx is going to be run
 
-    output_format:  str
+    output_format : str
         It can be either `html` or `text`.
 
     temp_confdir : bool
@@ -308,8 +309,8 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
     Returns
     -------
-    An Sphinx-processed string, in either HTML or plain text format, depending
-    on the value of `output_format`
+    A Sphinx-processed string, in either HTML or plain text format, depending
+    on the value of `output_format`.
     """
     if docstring is None:
         docstring = ''
@@ -332,7 +333,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
     if not docstring or docstring == '<no docstring>':
         template_vars['warning'] = 'true'
-        template_vars['warn_message'] = "No documentation available"
+        template_vars['warn_message'] = 'No documentation available'
 
     # Write docstring to rst_name
     with open(rst_name, 'w', encoding='utf-8') as rst_file:
@@ -357,16 +358,26 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     doctreedir = osp.join(srcdir, 'doctrees')
     with tempfile.TemporaryDirectory() as destdir:
         output_name = osp.join(destdir, 'docstring') + suffix
-        sphinx_app = Sphinx(srcdir, confdir, destdir, doctreedir, output_format,
-                            confoverrides, status=None, warning=None,
-                            freshenv=True, warningiserror=False, tags=None)
+        sphinx_app = Sphinx(
+            srcdir,
+            confdir,
+            destdir,
+            doctreedir,
+            output_format,
+            confoverrides,
+            status=None,
+            warning=None,
+            freshenv=True,
+            warningiserror=False,
+            tags=None,
+            )
 
+        # TODO: Make this message configurable, so that it can be translated
+        error_message = 'It was not possible to get rich help for this object'
         # Run the app
         try:
             sphinx_app.build(None, [rst_name])
         except SystemMessage:
-            # TODO: Make this message configurable, so that it can be translated
-            error_message = "It was not possible to get rich help for this object"
             output = warning(error_message)
             return output
 
@@ -376,7 +387,6 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
                 output = fid.read()
             output = output.replace('<pre>', '<pre class="literal-block">')
         else:
-            error_message = "It was not possible to get rich help for this object"
             output = warning(error_message)
 
         # Merge the srcdir and destdir
@@ -392,11 +402,10 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
 
 def rich_repr(oinfo):
     """
-    Generate a rich representation of an object's docstring and several
-    other metadata associated with it.
+    Generate a rich representation of an object's docstring and its metadata.
 
     These data are contained in an `oinfo` dict, as computed by the
-    IPython.core.oinspect library
+    IPython.core.oinspect library.
 
     Parameters
     ----------
@@ -405,7 +414,7 @@ def rich_repr(oinfo):
 
     Returns
     -------
-    The url of the page that contains the rich representation
+    The url of the page that contains the rich representation.
     """
     # Create srcdir
     if not osp.isdir(CACHEDIR):
@@ -413,7 +422,7 @@ def rich_repr(oinfo):
     srcdir = tempfile.mkdtemp(dir=CACHEDIR)
     srcdir = to_unicode_from_fs(srcdir)
 
-    output_file = osp.join(srcdir, 'rich_repr_output.html')
+    output_file_path = osp.join(srcdir, 'rich_repr_output.html')
 
     template_vars = init_template_vars(oinfo)
 
@@ -457,12 +466,12 @@ def rich_repr(oinfo):
     # Replace vars on the template
     env = Environment()
     env.loader = FileSystemLoader(osp.join(CONFDIR_PATH, 'templates'))
-    page = env.get_template("rich_repr.html")
+    page = env.get_template('rich_repr.html')
     output = page.render(**template_vars)
 
     # Rewrite output contents after adjustments
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(output)
+    with open(output_file_path, 'w', encoding='utf-8') as output_file:
+        output_file.write(output)
 
-    # Return output file name
-    return output_file
+    # Return output file path
+    return output_file_path

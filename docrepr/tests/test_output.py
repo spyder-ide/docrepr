@@ -208,12 +208,13 @@ def test_sphinxify(
         build_oinfo, set_docrepr_options, open_browser,
         obj, oinfo_data, docrepr_options,
         ):
-    if (oinfo_data.get("docstring", None) == PLOT_DOCSTRING
+    """Test the operation of the Sphinxify module on various docstrings."""
+    if (oinfo_data.get('docstring', None) == PLOT_DOCSTRING
             and sys.version_info.major == 3
             and sys.version_info.minor == 6
-            and sys.platform.startswith("win")):
+            and sys.platform.startswith('win')):
         pytest.skip(
-            "Plot fails on Py3.6 on Windows; older version of Matplotlib?")
+            'Plot fails on Py3.6 on Windows; older version of Matplotlib?')
 
     oinfo = build_oinfo(obj, **oinfo_data)
     set_docrepr_options(**docrepr_options)
