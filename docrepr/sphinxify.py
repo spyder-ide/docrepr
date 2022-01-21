@@ -15,7 +15,6 @@ http://doc.sagemath.org/html/en/reference/notebook/sagenb/misc/sphinxify.html
 """
 
 # Stdlib imports
-import inspect
 import os
 import os.path as osp
 import re
@@ -74,17 +73,7 @@ def warning(message):
     return warning_template.render(css_path=CSS_PATH, text=message)
 
 
-def format_argspec(argspec):
-    """Format argspect, convenience wrapper around inspect's.
-
-    This takes a dict instead of ordered arguments and calls
-    inspect.format_argspec with the arguments in the necessary order.
-    """
-    return inspect.formatargspec(argspec['args'], argspec['varargs'],
-                                 argspec['varkw'], argspec['defaults'])
-
-
-def getsignaturefromtext(text, objname):
+def get_signature_from_text(text, objname):
     """Get object signatures from text (object documentation).
 
     Return a list containing a single string in most cases
@@ -111,6 +100,50 @@ def getsignaturefromtext(text, objname):
         sig = '(' + sig.split('(')[-1] # Remove objname
         return sig
     return ''
+
+
+def get_signature(name=None, docstring=None, definition=None):
+    """Construct the signature of the given object."""
+    if docstring:
+        signature = get_signature_from_text(docstring, name)
+        if signature:
+            return signature
+
+    if definition:
+        definition = re.sub(r'\(\n\s*', '(', definition)
+        definition = re.sub(r',\n\s*\)', ')', definition)
+        definition = re.sub(r',\n\s*', ', ', definition)
+        definition = definition.replace('\n', ' ')
+        return definition
+
+    return ''
+
+
+def get_signature_from_oinfo(oinfo):
+    """Attempt to retrieve the signature of the given object from its info."""
+    definition = None
+    if oinfo.get('definition'):
+        definition = oinfo['definition']
+    elif oinfo.get('call_definition'):
+        definition = oinfo['call_definition']
+    elif oinfo.get('call_def'):
+        definition = oinfo['call_def']
+    elif oinfo.get('init_definition'):
+        definition = oinfo['init_definition']
+
+    if definition is None:
+        return None
+
+    docstring = None
+    if oinfo.get('docstring'):
+        docstring = oinfo['docstring']
+    elif oinfo.get('init_docstring'):
+        docstring = oinfo['init_docstring']
+    elif oinfo.get('call_docstring'):
+        docstring = oinfo['call_docstring']
+
+    return get_signature(
+        name=oinfo.get('Name'), docstring=docstring, definition=definition)
 
 
 def generate_conf(directory):
@@ -175,25 +208,11 @@ def init_template_vars(oinfo):
 
     # Argspec
     tmpl_vars['argspec'] = ''
-    if oinfo.get('argspec', None) is None:
-        argspec = getsignaturefromtext(oinfo['docstring'], oinfo['name'])
-        if argspec:
-            tmpl_vars['argspec'] = argspec
-    else:
-        argspec = oinfo['argspec']
-        try:
-            has_self = argspec['args'][0] == 'self'
-        except (KeyError, IndexError):
-            fmt_argspec = getsignaturefromtext(
-                oinfo['docstring'], oinfo['name'])
-            if fmt_argspec:
-                tmpl_vars['argspec'] = fmt_argspec
-            else:
-                tmpl_vars['argspec'] = '(...)'
-        else:
-            if has_self:
-                argspec['args'] = argspec['args'][1:]
-                tmpl_vars['argspec'] = format_argspec(argspec)
+    argspec = get_signature_from_oinfo(oinfo)
+    if argspec:
+        tmpl_vars['argspec'] = argspec
+    elif argspec is not None:
+        tmpl_vars['argspec'] = '(...)'
 
     # Type
     if oinfo['type_name'] is None:
@@ -243,13 +262,7 @@ def wrap_docstring(docstring, name=None, type_name=None, definition=None):
             'function', 'method', 'property', 'attribute', 'module']:
         type_name = 'class'
 
-    if definition:
-        definition = re.sub(r'\(\n\s*', '(', definition)
-        definition = re.sub(r',\n\s*\)', ')', definition)
-        definition = re.sub(r',\n\s*', ', ', definition)
-        definition = definition.replace('\n', ' ')
-    else:
-        definition = ''
+    definition = definition or ''
 
     wrapped_docstring = DOCSTRING_TEMPLATE.format(
         type_name=type_name,
@@ -262,16 +275,11 @@ def wrap_docstring(docstring, name=None, type_name=None, definition=None):
 
 def wrap_main_docstring(oinfo):
     """Wrap an object's main docstring in the appropriate Sphinx domain."""
-    if oinfo.get('definition'):
-        definition = oinfo.get('definition')
-    else:
-        definition = oinfo.get('init_definition')
-
     wrapped_docstring = wrap_docstring(
         docstring = oinfo['docstring'],
         name = oinfo.get('name'),
         type_name = oinfo.get('type_name'),
-        definition = definition
+        definition = get_signature_from_oinfo(oinfo),
         )
     return wrapped_docstring
 

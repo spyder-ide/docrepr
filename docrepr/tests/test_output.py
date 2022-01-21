@@ -4,6 +4,7 @@
 import copy
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 # Third party imports
@@ -85,10 +86,24 @@ TEST_CASES = {
         'obj': None,
         'oinfo': {
             'name': 'Foo',
-            'argspec': {},
             'docstring': 'A test',
             'type_name': 'Function',
             },
+        'options': {},
+        },
+    'function_nosphinx_python_docs': {
+        'obj': subprocess.run,
+        'oinfo': {'name': 'run'},
+        'options': {},
+        },
+    'class_nosphinx_python_docs': {
+        'obj': tempfile.TemporaryDirectory,
+        'oinfo': {'name': 'TemporaryDirectory'},
+        'options': {},
+        },
+    'method_nosphinx_thirdparty': {
+        'obj': Inspector().info,
+        'oinfo': {'name': 'Inspector.info'},
         'options': {},
         },
     'function_sphinx': {
@@ -148,11 +163,6 @@ TEST_CASES = {
             'name': 'Foo',
             'docstring': PLOT_DOCSTRING
             },
-        'options': {},
-        },
-    'python_docs': {
-        'obj': subprocess.run,
-        'oinfo': {'name': 'run'},
         'options': {},
         },
     'no_docstring': {
