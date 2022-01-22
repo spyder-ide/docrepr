@@ -18,6 +18,55 @@ import docrepr.sphinxify as sphinxify
 
 # ---- Test data
 
+# A sample function to test
+def get_random_ingredients(kind=None):
+    """
+    Return a list of random ingredients as strings.
+
+    :param kind: Optional "kind" of ingredients.
+    :type kind: list[str] or None
+    :raise ValueError: If the kind is invalid.
+    :return: The ingredients list.
+    :rtype: list[str]
+
+    """
+    if 'spam' in kind:
+        return ['spam', 'spam', 'eggs', 'spam']
+    return ['eggs', 'bacon', 'spam']
+
+
+# A sample class to test
+class SpamCans:
+    """
+    Cans of spam.
+
+    :param n_cans: Number of cans of spam.
+    :type n_cans: int
+    :raise ValueError: If spam is negative.
+
+    """
+
+    def __init__(self, n_cans=1):
+        """Spam init."""
+        if n_cans < 0:
+            raise ValueError('Spam must be non-negative!')
+        self.n_cans = n_cans
+
+    def eat_one(self):
+        """
+        Eat one can of spam.
+
+        :raise ValueError: If we're all out of spam.
+        :return: The number of cans of spam left.
+        :rtype: int
+
+        """
+        if self.n_cans <= 0:
+            raise ValueError('All out of spam!')
+        self.n_cans -= 1
+        return self.n_cans
+
+
 PLOT_DOCSTRING = """
 .. plot::
 
@@ -42,6 +91,21 @@ TEST_CASES = {
             },
         'options': {},
         },
+    'function_sphinx': {
+        'obj': get_random_ingredients,
+        'oinfo': {'name': 'get_random_ingredients'},
+        'options': {},
+        },
+    'class_sphinx': {
+        'obj': SpamCans,
+        'oinfo': {'name': 'SpamCans'},
+        'options': {},
+        },
+    'method_sphinx': {
+        'obj': SpamCans().eat_one,
+        'oinfo': {'name': 'SpamCans.eat_one'},
+        'options': {},
+        },
     'render_math': {
         'obj': None,
         'oinfo': {
@@ -57,6 +121,11 @@ TEST_CASES = {
             'docstring': 'This is a rational number :math:`\\frac{x}{y}`',
             },
         'options': {'render_math': False},
+        },
+    'numpy_module': {
+        'obj': np,
+        'oinfo': {'name': 'NumPy'},
+        'options': {},
         },
     'numpy_sin': {
         'obj': np.sin,

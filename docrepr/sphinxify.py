@@ -22,6 +22,7 @@ import re
 import shutil
 import sys
 import tempfile
+import textwrap
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -49,14 +50,20 @@ else:
     username = to_unicode_from_fs(os.environ.get('USER'))
     CACHEDIR = tempfile.gettempdir() + osp.sep + 'docrepr-' + str(username)
 
+DOCSTRING_TEMPLATE = """
+.. py:{type_name}:: {name}{definition}
+
+{docstring}
+"""
 
 #-----------------------------------------------------------------------------
 # Utility functions
 #-----------------------------------------------------------------------------
 def is_sphinx_markup(docstring):
-    """Returns whether a string contains Sphinx-style ReST markup."""
-    # this could be made much more clever
-    return ("`" in docstring or "::" in docstring)
+    """Returns whether a string contains Sphinx-style reST markup."""
+    return bool(re.search(r'\n\s*:param ', docstring)
+                or re.search(r'\n\s*:return: ', docstring)
+                or re.search(r'\n\s*:raise ', docstring))
 
 
 def warning(message):
@@ -218,6 +225,67 @@ def generate_extensions(render_math):
     return extensions
 
 
+def wrap_docstring(docstring, name=None, type_name=None, definition=None):
+    """Generate a docstring wrapped in the appropriate Sphinx domain."""
+    should_wrap_docstring = bool(
+        docstring
+        and is_sphinx_markup(docstring)
+        and (docstring != '<no docstring>')
+        and type_name
+        and name
+        )
+    if not should_wrap_docstring:
+        return docstring
+
+    indented_docstring = textwrap.indent(docstring, ' ' * 3)
+
+    if type_name not in [
+            'function', 'method', 'property', 'attribute', 'module']:
+        type_name = 'class'
+
+    if definition:
+        definition = re.sub(r'\(\n\s*', '(', definition)
+        definition = re.sub(r',\n\s*\)', ')', definition)
+        definition = re.sub(r',\n\s*', ', ', definition)
+        definition = definition.replace('\n', ' ')
+    else:
+        definition = ''
+
+    wrapped_docstring = DOCSTRING_TEMPLATE.format(
+        type_name=type_name,
+        name=name,
+        definition=definition,
+        docstring=indented_docstring,
+        )
+    return wrapped_docstring
+
+
+def wrap_main_docstring(oinfo):
+    """Wrap an object's main docstring in the appropriate Sphinx domain."""
+    if oinfo.get('definition'):
+        definition = oinfo.get('definition')
+    else:
+        definition = oinfo.get('init_definition')
+
+    wrapped_docstring = wrap_docstring(
+        docstring = oinfo['docstring'],
+        name = oinfo.get('name'),
+        type_name = oinfo.get('type_name'),
+        definition = definition
+        )
+    return wrapped_docstring
+
+
+def wrap_class_docstring(oinfo):
+    """Wrap an object's class docstring wrapped in a Sphinx domain."""
+    wrapped_docstring = wrap_docstring(
+        docstring = oinfo.get('class_docstring'),
+        name = oinfo.get('type_name'),
+        type_name = 'class',
+        )
+    return wrapped_docstring
+
+
 #-----------------------------------------------------------------------------
 # Sphinxify
 #-----------------------------------------------------------------------------
@@ -228,7 +296,7 @@ def sphinxify(docstring, srcdir, output_format='html', temp_confdir=False):
     Parameters
     ----------
     docstring : str
-        a ReST-formatted docstring
+        A reST-formatted docstring
 
     srcdir : str
         Source directory where Sphinx is going to be run
@@ -350,12 +418,16 @@ def rich_repr(oinfo):
 
     template_vars = init_template_vars(oinfo)
 
+    # Wrap docstring in Sphinx directive for appropriate processing
+    wrapped_docstring = wrap_main_docstring(oinfo)
+
     # Sphinxified dsocstring contents
-    obj_doc = sphinxify(oinfo['docstring'], srcdir)
+    obj_doc = sphinxify(wrapped_docstring, srcdir)
     template_vars['docstring'] = obj_doc
 
     if oinfo.get('class_docstring'):
-        class_doc = sphinxify(oinfo['class_docstring'], srcdir)
+        wrapped_class_docstring = wrap_class_docstring(oinfo)
+        class_doc = sphinxify(wrapped_class_docstring, srcdir)
         template_vars['class_docstring'] = class_doc
     else:
         template_vars['class_docstring'] = ''
