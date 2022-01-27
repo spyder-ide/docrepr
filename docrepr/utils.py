@@ -14,10 +14,7 @@ PREFERRED_ENCODING = locale.getpreferredencoding()
 #==============================================================================
 
 def getfilesystemencoding():
-    """
-    Query the filesystem for the encoding used to encode filenames
-    and environment variables.
-    """
+    """Query filesystem for encoding used to encode filenames & env vars."""
     encoding = sys.getfilesystemencoding()
     if encoding is None:
         # Must be Linux or Unix and nl_langinfo(CODESET) failed.
@@ -29,9 +26,7 @@ FS_ENCODING = getfilesystemencoding()
 
 
 def to_unicode_from_fs(string):
-    """
-    Return a unicode version of string decoded using the file system encoding.
-    """
+    """Return a unicode version of string decoded using the fs encoding."""
     if isinstance(string, bytes):
         try:
             unic = string.decode(FS_ENCODING)

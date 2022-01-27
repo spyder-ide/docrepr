@@ -4,6 +4,7 @@
 import copy
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 # Third party imports
@@ -13,7 +14,7 @@ from IPython.core.oinspect import Inspector, object_info
 
 # Local imports
 import docrepr
-import docrepr.sphinxify as sphinxify
+import docrepr.sphinxify
 
 
 # ---- Test data
@@ -85,10 +86,24 @@ TEST_CASES = {
         'obj': None,
         'oinfo': {
             'name': 'Foo',
-            'argspec': {},
             'docstring': 'A test',
             'type_name': 'Function',
             },
+        'options': {},
+        },
+    'function_nosphinx_python_docs': {
+        'obj': subprocess.run,
+        'oinfo': {'name': 'run'},
+        'options': {},
+        },
+    'class_nosphinx_python_docs': {
+        'obj': tempfile.TemporaryDirectory,
+        'oinfo': {'name': 'TemporaryDirectory'},
+        'options': {},
+        },
+    'method_nosphinx_thirdparty': {
+        'obj': Inspector().info,
+        'oinfo': {'name': 'Inspector.info'},
         'options': {},
         },
     'function_sphinx': {
@@ -150,11 +165,6 @@ TEST_CASES = {
             },
         'options': {},
         },
-    'python_docs': {
-        'obj': subprocess.run,
-        'oinfo': {'name': 'run'},
-        'options': {},
-        },
     'no_docstring': {
         'obj': None,
         'oinfo': {'docstring': '<no docstring>'},
@@ -208,17 +218,18 @@ def test_sphinxify(
         build_oinfo, set_docrepr_options, open_browser,
         obj, oinfo_data, docrepr_options,
         ):
-    if (oinfo_data.get("docstring", None) == PLOT_DOCSTRING
+    """Test the operation of the Sphinxify module on various docstrings."""
+    if (oinfo_data.get('docstring', None) == PLOT_DOCSTRING
             and sys.version_info.major == 3
             and sys.version_info.minor == 6
-            and sys.platform.startswith("win")):
+            and sys.platform.startswith('win')):
         pytest.skip(
-            "Plot fails on Py3.6 on Windows; older version of Matplotlib?")
+            'Plot fails on Py3.6 on Windows; older version of Matplotlib?')
 
     oinfo = build_oinfo(obj, **oinfo_data)
     set_docrepr_options(**docrepr_options)
 
-    url = sphinxify.rich_repr(oinfo)
+    url = docrepr.sphinxify.rich_repr(oinfo)
 
     output_file = Path(url)
     assert output_file.is_file()
