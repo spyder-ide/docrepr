@@ -72,6 +72,8 @@ pip-delete-this-directory.txt
 coverage.xml
 htmlcov/
 nosetests.xml
+docrepr/tests/screenshots/
+docrepr/tests/diffs/
 
 # Translations
 *.mo

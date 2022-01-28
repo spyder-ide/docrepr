@@ -1,0 +1,67 @@
+name: Update Reference Screenshots
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+
+jobs:
+  update-reference-screenshots:
+    name: Update reference screenshots on ${{ matrix.os }}
+    if: ${{ github.event.issue.pull_request && contains(github.event.comment.body, 'Please update reference screenshots') }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+        - os: ubuntu-latest
+          install-command: 'sudo apt'
+        - os: windows-latest
+          install-command: 'choco'
+        - os: macos-latest
+          install-command: 'brew'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Checkout the branch from the PR that triggered the job
+        run: hub pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Print basic Python info
+        shell: python
+        run: |
+          import sys
+          print(sys.executable, sys.version, sep='\n')
+      - name: Install docrepr
+        run: python -m pip install --upgrade .[test,visual_test]
+      - name: List packages in environment
+        run: pip list
+      - name: Install Firefox
+        run: python -m playwright install firefox
+      - name: Generate updated reference screenshots
+        shell: bash
+        run: python -I -bb -X dev -W error -m pytest --update-reference-screenshots --asyncio-mode=auto
+      - name: Compress screenshots
+        shell: bash
+        run: |
+          ${{ matrix.install-command }} install optipng
+          optipng docrepr/tests/reference_screenshots/*.png
+      - name: Commit reference images
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+          git pull
+
+          git add docrepr/tests/reference_screenshots
+
+          git commit -m "Update reference screenshots for ${{ matrix.os }}"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
