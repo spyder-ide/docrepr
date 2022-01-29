@@ -1,3 +1,8 @@
+# Copyright (c) 2009 Tim Dumol
+# Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
+#
+# Distributed under the terms of the BSD BSD 3-Clause License
+
 """Utilities (adapted from Spyder source code)."""
 
 # Standard library modules

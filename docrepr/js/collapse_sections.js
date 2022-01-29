@@ -2,11 +2,12 @@
 //  Toggleable sections
 //
 //  Added expand/collapse functionality to RST sections.
-//  Code from the Cloud Sphinx theme
+//  Code from the Cloud Sphinx theme.
 //
-//  Copyright 2011-2012 by Assurance Technologies
+//  Copyright (c) 2011-2012 Assurance Technologies, LLC
+//  Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
 //
-//  Distributed under the terms of the BSD License
+//  Distributed under the terms of the BSD 3-Clause License.
 //----------------------------------------------------------------------------
 
 //============================================================================

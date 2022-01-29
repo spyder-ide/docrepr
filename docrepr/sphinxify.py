@@ -1,17 +1,23 @@
+# Copyright (c) 2009 Tim Dumol
+# Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
+#
+# Distributed under the terms of the BSD BSD 3-Clause License
+
 """
-Process docstrings with Sphinx
+Process docstrings with Sphinx.
 
 AUTHORS:
 - Tim Joseph Dumol (2009-09-29): initial version
 - The Spyder Development Team: Maintenance
 
-Copyright (C) 2009 Tim Dumol <tim@timdumol.com>
-Copyright (C) 2013- The Spyder Development Team
-Distributed under the terms of the BSD License
+Copyright (c) 2009 Tim Dumol <tim@timdumol.com>
+Copyright (c) 2013- The Spyder Development Team
+Distributed under the terms of the BSD 3-Clause License.
 
-Taken from the Sage project (www.sagemath.org).
+Adapted from the Sage project (www.sagemath.org).
 See here for the original version:
 http://doc.sagemath.org/html/en/reference/notebook/sagenb/misc/sphinxify.html
+Full history: https://github.com/spyder-ide/docrepr/issues/20
 """
 
 # Stdlib imports
