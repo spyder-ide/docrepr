@@ -1,17 +1,17 @@
-#
 # Copyright (c) 2009 Tim Dumol
-# Copyright (c) 2013- The Spyder Development team
+# Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
 #
-# Licensed under the terms of the Modified BSD License
+# Distributed under the terms of the BSD BSD 3-Clause License
 
 """
-Docrepr library
+Docrepr
+=======
 
 Library to generate rich and plain representations of docstrings,
 including several metadata of the object to which the docstring
-belongs
+belongs.
 
-Derived from spyderlib.utils.inspector and IPython.core.oinspect
+Derived from spyderlib.utils.inspector and IPython.core.oinspect.
 """
 
 __version__ = '0.2.0.dev0'

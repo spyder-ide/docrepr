@@ -1,9 +1,9 @@
 //----------------------------------------------------------------------------
-//  Move Outline section to be the first one
+//  Move Outline section to be the first one.
 //
-//  Copyright (c) 2013- The Spyder Development Team
+//  Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
 //
-//  Distributed under the terms of the MIT License
+//  Distributed under the terms of the MIT License.
 //----------------------------------------------------------------------------
 
 //============================================================================

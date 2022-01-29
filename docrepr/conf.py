@@ -1,9 +1,9 @@
+# Copyright (c) 2009 Tim Dumol
+# Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
 #
-# Copyright (C) 2009 Tim Dumol <tim@timdumol.com>
-# Copyright (C) 2013- The Spyder Development Team
-# Distributed under the terms of the BSD License
+# Distributed under the terms of the BSD BSD 3-Clause License
 
-"""Sphinx conf file for the docrepr library"""
+"""Sphinx conf file for the docrepr library."""
 
 import os
 import sys

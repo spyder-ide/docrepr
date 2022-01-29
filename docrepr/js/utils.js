@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------
 //  Several utility functions to modify docstring webpages while they are
-//  rendered
+//  rendered.
 //
-//  Copyright (C) 2013- The Spyder Development Team
+//  Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
 //
 //  Distributed under the terms of the MIT License.
 //----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ $(document).ready(function () {
 
     // Change docstring headers from h1 to h2
     // It can only be an h1 and that's the page title
-    // Taken from http://forum.jquery.com/topic/how-to-replace-h1-h2
+    // Taken from https://forum.jquery.com/topic/how-to-replace-h1-h2
     $('div.docstring').find('div.section h1').replaceWith(function () {
         return '<h2>' + $(this).text() + '</h2>';
     });
