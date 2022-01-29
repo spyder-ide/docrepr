@@ -8,7 +8,7 @@ module developed for the Spyder IDE.
 
 Video presentation @ SciPy 2015 by Carlos Cordoba:
 
-[![Towards a Better Documentation System for Scientific Python | SciPy 2015 | Carlos Cordoba ](http://img.youtube.com/vi/q0r7FsDZU9s/0.jpg)](http://www.youtube.com/watch?v=q0r7FsDZU9s)
+[![Towards a Better Documentation System for Scientific Python | SciPy 2015 | Carlos Cordoba ](https://img.youtube.com/vi/q0r7FsDZU9s/0.jpg)](https://www.youtube.com/watch?v=q0r7FsDZU9s)
 
 # Details
 

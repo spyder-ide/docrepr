@@ -8,7 +8,7 @@
 //  Copyright (c) 2011, 2012 Python Software Foundation
 //  Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
 //
-//  Taken from http://docs.python.org/_static/copybutton.js
+//  Taken from https://docs.python.org/_static/copybutton.js
 //  Released under the PSF License: https://docs.python.org/3/license.html
 //
 // NOTE: This code only works with jQuery **1.8.3** or less.

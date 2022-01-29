@@ -15,8 +15,6 @@ Copyright (c) 2013- The Spyder Development Team
 Distributed under the terms of the BSD 3-Clause License.
 
 Adapted from the Sage project (www.sagemath.org).
-See here for the original version:
-http://doc.sagemath.org/html/en/reference/notebook/sagenb/misc/sphinxify.html
 Full history: https://github.com/spyder-ide/docrepr/issues/20
 """
 
