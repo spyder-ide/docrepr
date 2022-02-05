@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Configure hub setting to use https
+        run: git config --global hub.protocol https
       - name: Checkout the branch from the PR that triggered the job
         run: hub pr checkout ${{ github.event.issue.number }}
         env:
