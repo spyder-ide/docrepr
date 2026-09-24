@@ -179,7 +179,9 @@ def global_template_vars():
         # TODO: Fix local use of MathJax
         mathjax_path = 'file:///' + osp.join(JS_PATH, 'mathjax')
     else:
-        mathjax_path = 'https://cdn.mathjax.org/mathjax/latest'
+        # MathJax 3, served from the officially recommended jsDelivr CDN
+        # (the old self-hosted cdn.mathjax.org was retired in 2017).
+        mathjax_path = 'https://cdn.jsdelivr.net/npm/mathjax@3'
 
     global_vars = {
         'css_path': CSS_PATH,

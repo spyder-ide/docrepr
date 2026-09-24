@@ -22,17 +22,24 @@
     <script type="text/javascript" src="file:///{{js_path}}/bootstrap.js"></script>
 
     {% if math_on %}
-    {# DON'T try to load MathJax from the net. It's slow and sometimes gives
-       errors. See this thread for more info:
-       http://tex.stackexchange.com/questions/2692/comparing-mathjax-and-mathml
+    {# MathJax 3 configuration. Sphinx's mathjax extension emits inline math
+       wrapped in \( ... \) delimiters, which is what we enable below. See
+       https://docs.mathjax.org/en/v3.0-latest/web/configuration.html
     #}
-    <script type="text/javascript"
-        {% if use_qt4 %}
-            src="{{mathjax_path}}/MathJax.js?config=TeX-AMS-MML_SVG-full">
-        {% else %}
-            src="{{mathjax_path}}/MathJax.js?config=TeX-AMS_HTML">
-        {% endif %}
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            },
+            options: {
+                {# Don't typeset the code blocks, only the .math spans #}
+                ignoreHtmlClass: 'highlight|literal-block',
+                processHtmlClass: 'math'
+            }
+        };
     </script>
+    <script async src="{{mathjax_path}}/es5/tex-mml-chtml.js"></script>
     {% endif %}
 </head>
 
