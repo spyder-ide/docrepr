@@ -8,10 +8,13 @@
 //  Copyright (c) 2011, 2012 Python Software Foundation
 //  Copyright (c) 2013- The Spyder Development Team and Docrepr Contributors
 //
-//  Taken from https://docs.python.org/_static/copybutton.js
+//  Originally taken from https://docs.python.org/_static/copybutton.js
 //  Released under the PSF License: https://docs.python.org/3/license.html
 //
-// NOTE: This code only works with jQuery **1.8.3** or less.
+//  Updated to work with modern jQuery (>= 1.9): the original relied on the
+//  two-argument ``$.fn.toggle(fn, fn)`` event helper, which was removed in
+//  jQuery 1.9, so the button silently did nothing with any recent jQuery.
+//  It is now a plain click handler that tracks its own state.
 //----------------------------------------------------------------------------
 
 //============================================================================
@@ -19,8 +22,12 @@
 //============================================================================
 
 $(document).ready(function() {
-    var div = $('.highlight-python .highlight,' +
-                '.highlight-python3 .highlight')
+    // Match highlighted code blocks regardless of the language-specific
+    // wrapper class Sphinx adds (older versions used .highlight-python /
+    // .highlight-python3; doctest blocks in docstrings render as a bare
+    // .highlight). The per-block ``.gp`` guard below ensures the button is
+    // only added to blocks that actually contain >>> prompts.
+    var div = $('div.highlight')
     var pre = div.find('pre');
 
     // get the styles from the current theme
@@ -45,6 +52,7 @@ $(document).ready(function() {
             var button = $('<span class="copybutton">&gt;&gt;&gt;</span>');
             button.css(button_styles)
             button.attr('title', hide_text);
+            button.data('hidden', 'false');
             jthis.prepend(button);
         }
         // tracebacks (.gt) contain bare text elements that need to be
@@ -55,19 +63,22 @@ $(document).ready(function() {
     });
 
     // define the behavior of the button when it's clicked
-    $('.copybutton').toggle(
-        function() {
-            var button = $(this);
+    $('.copybutton').on('click', function() {
+        var button = $(this);
+        if (button.data('hidden') === 'false') {
+            // hide the prompts and output
             button.parent().find('.go, .gp, .gt').hide();
             button.next('pre').find('.gt').nextUntil('.gp, .go').css('visibility', 'hidden');
             button.css('text-decoration', 'line-through');
             button.attr('title', show_text);
-        },
-        function() {
-            var button = $(this);
+            button.data('hidden', 'true');
+        } else {
+            // show the prompts and output
             button.parent().find('.go, .gp, .gt').show();
             button.next('pre').find('.gt').nextUntil('.gp, .go').css('visibility', 'visible');
             button.css('text-decoration', 'none');
             button.attr('title', hide_text);
-        });
+            button.data('hidden', 'false');
+        }
+    });
 });
