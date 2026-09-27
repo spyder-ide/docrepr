@@ -13,6 +13,7 @@ from pathlib import Path
 
 # Third party imports
 import pytest
+import pytest_asyncio
 from PIL import Image, ImageChops
 
 # ---- Constants
@@ -64,7 +65,7 @@ def open_browser(request):
     return _open_browser
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def compare_screenshots(request):
     """Run visual regression test on the output."""
     async def _compare_screenshots(test_id, url):

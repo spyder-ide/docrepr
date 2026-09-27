@@ -195,7 +195,7 @@ def fixture_build_oinfo():
         if obj is not None:
             oinfo = Inspector().info(obj)
         else:
-            oinfo = object_info()
+            oinfo = object_info(name=None, found=None)
         oinfo = {**oinfo, **oinfo_data}
         return oinfo
     return _build_oinfo

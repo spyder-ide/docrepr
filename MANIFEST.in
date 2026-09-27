@@ -3,6 +3,7 @@ include CHANGELOG.md
 include LICENSE.txt
 include README.md
 include conftest.py
+include pytest.ini
 recursive-include docrepr/static *.*
 recursive-include docrepr/js *.*
 recursive-include docrepr/templates *.*
