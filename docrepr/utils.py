@@ -50,7 +50,11 @@ def merge_directories(source, destination):
     """Merge a source into a dest dir; compat shim for Python <3.8."""
     try:
         shutil.copytree(source, destination, dirs_exist_ok=True)
-    except TypeError:
+    except (TypeError, shutil.Error):
+        # XXX: Also handle shutil.Error, which can occur when
+        # shutil.copytree attempts to merge directories containing
+        # same-named read-only files.  This case is correctly handled
+        # by the manual copy routine below.
         pass
     else:
         return
