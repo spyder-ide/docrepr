@@ -106,7 +106,7 @@ TEST_CASES = {
         'options': {},
         },
     'method_nosphinx_thirdparty': {
-        'obj': Inspector().info,
+        'obj': Inspector(theme_name='linux').info,
         'oinfo': {'name': 'Inspector.info'},
         'options': {},
         },
@@ -193,9 +193,9 @@ def fixture_build_oinfo():
     """Generate object information for tests."""
     def _build_oinfo(obj=None, **oinfo_data):
         if obj is not None:
-            oinfo = Inspector().info(obj)
+            oinfo = Inspector(theme_name='linux').info(obj)
         else:
-            oinfo = object_info()
+            oinfo = object_info(name='', found=False)
         oinfo = {**oinfo, **oinfo_data}
         return oinfo
     return _build_oinfo
@@ -227,13 +227,6 @@ async def test_sphinxify(
         test_id, obj, oinfo_data, docrepr_options,
         ):
     """Test the operation of the Sphinxify module on various docstrings."""
-    if (oinfo_data.get('docstring', None) == PLOT_DOCSTRING
-            and sys.version_info.major == 3
-            and sys.version_info.minor == 6
-            and sys.platform.startswith('win')):
-        pytest.skip(
-            'Plot fails on Py3.6 on Windows; older version of Matplotlib?')
-
     oinfo = build_oinfo(obj, **oinfo_data)
     set_docrepr_options(**docrepr_options)
 
