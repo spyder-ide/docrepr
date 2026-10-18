@@ -24,17 +24,15 @@ jobs:
           install-command: 'brew'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Configure hub setting to use https
-        run: git config --global hub.protocol https
+        uses: actions/checkout@v7
       - name: Checkout the branch from the PR that triggered the job
-        run: hub pr checkout ${{ github.event.issue.number }}
+        run: gh pr checkout ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v7
         with:
-          python-version: '3.8'
+          python-version: '3.11'
       - name: Print basic Python info
         shell: python
         run: |
