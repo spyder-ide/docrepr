@@ -29,7 +29,7 @@ from IPython.core.oinspect import Inspector   # oinfo generator
 import docrepr                                # Set module options
 from docrepr import sphinxify                 # html generator
 
-oinfo = Inspector().info(np.sin)
+oinfo = Inspector(theme_name='nocolor').info(np.sin)
 oinfo['name'] = 'sin'
 url = sphinxify.rich_repr(oinfo)
 

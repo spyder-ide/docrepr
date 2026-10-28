@@ -23,11 +23,11 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     steps:
     - name: Checkout branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v7
       with:
-        python-version: '3.8'
+        python-version: '3.11'
     - name: Print basic Python info
       shell: python
       run: |
@@ -44,9 +44,9 @@ jobs:
       run: python -I -bb -X dev -W error -m pytest --compare-screenshots --asyncio-mode=auto
     - name: Upload UI test artifacts
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v7
       with:
-        name: visual-regression-test-output
+        name: visual-regression-test-output-${{ matrix.os }}
         path: |
           docrepr/tests/reference_screenshots/**
           docrepr/tests/screenshots/**

@@ -21,17 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.6', '3.10']
-        include:
-        - python-version: '3.6'
-          pytest-args: ''
-        - python-version: '3.10'
-          pytest-args: '--asyncio-mode=auto'
+        python-version: ['3.11', '3.14']
     steps:
     - name: Checkout branch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
     - name: Setup Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python-version }}
     - name: Print basic Python info
@@ -52,7 +47,7 @@ jobs:
       run: pip list
     - name: Run tests
       shell: bash
-      run: python -I -bb -X dev -W error -m pytest ${{ matrix.pytest-args }}
+      run: python -I -bb -X dev -W error -m pytest
     - name: Twine check
       run: pipx run twine check --strict dist/*
     - name: Pip check
