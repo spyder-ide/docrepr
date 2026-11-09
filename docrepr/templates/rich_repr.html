@@ -9,25 +9,26 @@
     :license: BSD 3-clause license
 #}
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html>
+<!doctype html>
+<html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="file:///{{css_path}}/bootstrap.css" type="text/css" />
-    <link rel="stylesheet" href="file:///{{css_path}}/default.css" type="text/css" />
-    <link rel="stylesheet" href="file:///{{css_path}}/pygments.css" type="text/css" />
-    <script type="text/javascript" src="file:///{{jquery_path}}/jquery.js"></script>
-    <script type="text/javascript" src="file:///{{js_path}}/bootstrap.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="file:///{{css_path}}/bootstrap.css">
+    <link rel="stylesheet" href="file:///{{css_path}}/default.css">
+    <link rel="stylesheet" href="file:///{{css_path}}/pygments.css">
+    <script src="file:///{{jquery_path}}/jquery.js"></script>
+    <script src="file:///{{js_path}}/bootstrap.js"></script>
+    <script src="file:///{{js_path}}/utils.js"></script>
+    <script src="file:///{{js_path}}/copy_button.js"></script>
 
     {% if math_on %}
     {# DON'T try to load MathJax from the net. It's slow and sometimes gives
        errors. See this thread for more info:
        http://tex.stackexchange.com/questions/2692/comparing-mathjax-and-mathml
     #}
-    <script type="text/javascript"
+    <script
         {% if use_qt4 %}
             src="{{mathjax_path}}/MathJax.js?config=TeX-AMS-MML_SVG-full">
         {% else %}
@@ -35,32 +36,27 @@
         {% endif %}
     </script>
     {% endif %}
-</head>
 
-<script src="file:///{{js_path}}/utils.js" type="text/javascript" charset="utf-8"></script>
-<script src="file:///{{js_path}}/copy_button.js" type="text/javascript" charset="utf-8"></script>
-
-
-{% if use_qt4 %}
-    <script type="text/javascript" charset="utf-8">
+    {% if use_qt4 %}
+    <script>
         {% include js_path + "/math_config.js" %}
     </script>
-{% endif %}
+    {% endif %}
 
-{% if collapse %}
-<script src="file:///{{js_path}}/collapse_sections.js" type="text/javascript" charset="utf-8"></script>
-{% endif %}
+    {% if collapse %}
+    <script src="file:///{{js_path}}/collapse_sections.js"></script>
+    {% endif %}
 
-{% if outline %}
-<script src="file:///{{js_path}}/move_outline.js" type="text/javascript" charset="utf-8"></script>
-{% endif %}
+    {% if outline %}
+    <script src="file:///{{js_path}}/move_outline.js"></script>
+    {% endif %}
 
-{% if img_path %}
-<script type="text/javascript" charset="utf-8">
-{% include js_path + "/fix_image_paths.js" %}
-</script>
-{% endif %}
-
+    {% if img_path %}
+    <script>
+    {% include js_path + "/fix_image_paths.js" %}
+    </script>
+    {% endif %}
+</head>
 
 <body>
     {# Docstring header #}
