@@ -239,5 +239,30 @@ async def test_sphinxify(
     file_text = output_file.read_text(encoding='utf-8', errors='strict')
     assert len(file_text) > 512
 
+    # Regression checks for the HTML5 head and the pinned MathJax CDN
+    assert file_text.lstrip().startswith('<!doctype html>')
+    assert '<html lang="en">' in file_text
+    assert 'cdn.mathjax.org' not in file_text
+    if docrepr_options.get('render_math', True):
+        assert 'mathjax@2.7.9' in file_text
+
     await compare_screenshots(test_id, url)
     open_browser(url)
+
+
+def test_static_asset_versions():
+    """Check the vendored static assets are the expected upstream versions."""
+    expected_versions = [
+        (Path(docrepr.sphinxify.CSS_PATH) / 'bootstrap.css',
+         'v5.3.9'),
+        (Path(docrepr.sphinxify.JS_PATH) / 'bootstrap.js',
+         'v5.3.9'),
+        (Path(docrepr.sphinxify.JQUERY_PATH) / 'jquery.js',
+         'jQuery JavaScript Library v3.7.1'),
+        ]
+
+    for asset_path, version_string in expected_versions:
+        assert asset_path.is_file(), f'{asset_path} is missing'
+        header = asset_path.read_text(encoding='utf-8')[:1024]
+        assert version_string in header, (
+            f'{asset_path.name} does not pin {version_string!r}')
