@@ -254,9 +254,9 @@ def test_static_asset_versions():
     """Check the vendored static assets are the expected upstream versions."""
     expected_versions = [
         (Path(docrepr.sphinxify.CSS_PATH) / 'bootstrap.css',
-         'Bootstrap v3.4.1'),
+         'v5.3.9'),
         (Path(docrepr.sphinxify.JS_PATH) / 'bootstrap.js',
-         'Bootstrap v3.4.1'),
+         'v5.3.9'),
         (Path(docrepr.sphinxify.JQUERY_PATH) / 'jquery.js',
          'jQuery JavaScript Library v3.7.1'),
         ]

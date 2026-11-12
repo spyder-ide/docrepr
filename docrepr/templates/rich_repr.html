@@ -81,33 +81,48 @@
     <div class="tabs">
         <!-- Nav tabs -->
         <ul id="doc-tabs" class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#main" aria-controls="main" role="tab" data-toggle="tab"><b>Help</b></a></li>
+            <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="main-tab" href="#main"
+           aria-controls="main" aria-selected="true" role="tab"
+           data-bs-toggle="tab"><b>Help</b></a>
+    </li>
 
-            {% if class_docstring %}
-            <li role="presentation"><a href="#class" aria-controls="class" role="tab" data-toggle="tab"><b>Class help</b></a></li>
-            {% endif %}
+    {% if class_docstring %}
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="class-tab" href="#class"
+           aria-controls="class" aria-selected="false" role="tab"
+           data-bs-toggle="tab"><b>Class help</b></a>
+    </li>
+    {% endif %}
 
-            {% if docs_py_org %}
-            <li role="presentation"><a href="#docs-py-org" aria-controls="docs-py-org" role="tab" data-toggle="tab"><b>Web help</b></a></li>
-            {% endif %}
+    {% if docs_py_org %}
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="docs-py-org-tab" href="#docs-py-org"
+           aria-controls="docs-py-org" aria-selected="false" role="tab"
+           data-bs-toggle="tab"><b>Web help</b></a>
+    </li>
+    {% endif %}
         </ul>
 
         <!-- Tab panes -->
         <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="main">{{docstring}}</div>
+    <div class="tab-pane show active" id="main" role="tabpanel"
+         aria-labelledby="main-tab" tabindex="0">{{docstring}}</div>
 
-            {% if class_docstring %}
-            <div role="tabpanel" class="tab-pane" id="class">{{class_docstring}}</div>
-            {% endif %}
+    {% if class_docstring %}
+    <div class="tab-pane" id="class" role="tabpanel"
+         aria-labelledby="class-tab" tabindex="0">{{class_docstring}}</div>
+    {% endif %}
 
-            {% if docs_py_org %}
-            <div role="tabpanel" class="tab-pane" id="docs-py-org">
-                <div class="embed-responsive embed-responsive-4by3">
-                    <iframe class="embed-responsive-item" src="{{docs_py_org}}"></iframe>
-                </div>
-            </div>
-            {% endif %}
+    {% if docs_py_org %}
+    <div class="tab-pane" id="docs-py-org" role="tabpanel"
+         aria-labelledby="docs-py-org-tab" tabindex="0">
+        <div class="ratio ratio-4x3">
+            <iframe src="{{docs_py_org}}"></iframe>
         </div>
+    </div>
+    {% endif %}
+</div>
     </div>
 </body>
 
